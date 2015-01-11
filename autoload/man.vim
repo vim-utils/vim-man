@@ -27,10 +27,10 @@ function! man#get_page(...)
     let page = expand('<cword>')
   endif
 
-  if sect != "" && man#find_page(sect, page) == 0
+  if sect != "" && !s:manpage_exists(sect, page)
     let sect = ""
   endif
-  if man#find_page(sect, page) == 0
+  if !s:manpage_exists(sect, page)
     echohl ErrorMSG | echo "No manual entry for '".page."'." | echohl NONE
     return
   endif
@@ -67,7 +67,7 @@ function! man#get_page(...)
   setlocal modifiable nonumber norelativenumber nofoldenable
   silent keepj norm! 1GdG
   let $MANWIDTH = winwidth(0)
-  silent exec "r!/usr/bin/man ".man#get_cmd_arg(sect, page)." | col -b"
+  silent exec "r!/usr/bin/man ".s:get_cmd_arg(sect, page)." | col -b"
   " Remove blank lines from top and bottom.
   while getline(1) =~ '^\s*$'
     silent keepj norm! ggdd
@@ -118,21 +118,23 @@ function! man#pop_page()
   endif
 endfunction
 
-function! man#get_cmd_arg(sect, page)
+function! s:get_cmd_arg(sect, page)
   if a:sect == ''
     return a:page
+  else
+    return s:man_sect_arg.' '.a:sect.' '.a:page
   endif
-  return s:man_sect_arg.' '.a:sect.' '.a:page
 endfunction
 
-function! man#find_page(sect, page)
-  let where = system("/usr/bin/man ".s:man_find_arg.' '.man#get_cmd_arg(a:sect, a:page))
-  if where !~ "^/"
-    if matchstr(where, " [^ ]*$") !~ "^ /"
-      return 0
-    endif
+function! s:manpage_exists(sect, page)
+  let where = system('/usr/bin/man '.s:man_find_arg.' '.s:get_cmd_arg(a:sect, a:page))
+  if where !~# '^\s*/'
+    " result does not look like a file path
+    return 0
+  else
+    " found a manpage
+    return 1
   endif
-  return 1
 endfunction
 
 " vim:set ft=vim et sw=2:
