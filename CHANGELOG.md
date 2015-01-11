@@ -2,6 +2,7 @@
 
 ### master
 
+- improve error message shown when man page is not found
 - consistently use longer VimL keywords (function, command, syntax etc)
 - use `keepjumps` so that jumplist is not messed up
 - drop support for vim versions 5 and 6

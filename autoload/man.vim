@@ -31,7 +31,7 @@ function! man#get_page(...)
     let sect = ""
   endif
   if man#find_page(sect, page) == 0
-    echo "\nCannot find a '".page."'."
+    echohl ErrorMSG | echo "No manual entry for '".page."'." | echohl NONE
     return
   endif
   exec "let s:man_tag_buf_".s:man_tag_depth." = ".bufnr("%")
