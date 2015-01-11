@@ -75,7 +75,7 @@ function! man#get_page(...)
   while getline('$') =~ '^\s*$'
     silent keepj norm! Gdd
   endwhile
-  1
+  silent keepj norm! gg
   setlocal filetype=man nomodifiable
   setlocal bufhidden=hide
   setlocal nobuflisted
