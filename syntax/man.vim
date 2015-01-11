@@ -34,7 +34,7 @@ syn match  manLongOptionDesc  "^\s*--[a-z0-9-]\S*"
 " syn match  manHistory		"^[a-z].*last change.*$"
 
 if getline(1) =~ '^[a-zA-Z_]\+([23])'
-  syntax include @cCode <sfile>:p:h/c.vim
+  syntax include @cCode syntax/c.vim
   syn match manCFuncDefinition  display "\<\h\w*\>\s*("me=e-1 contained
   syn region manSynopsis start="^SYNOPSIS"hs=s+8 end="^\u\+\s*$"me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
 endif
