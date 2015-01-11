@@ -65,15 +65,15 @@ func man#get_page(...)
   setl buftype=nofile noswapfile
 
   setl ma nonu nornu nofen
-  silent exec "norm 1GdG"
+  silent keepj norm! 1GdG
   let $MANWIDTH = winwidth(0)
   silent exec "r!/usr/bin/man ".man#get_cmd_arg(sect, page)." | col -b"
   " Remove blank lines from top and bottom.
   while getline(1) =~ '^\s*$'
-    silent norm ggdd
+    silent keepj norm! ggdd
   endwhile
   while getline('$') =~ '^\s*$'
-    silent norm Gdd
+    silent keepj norm! Gdd
   endwhile
   1
   setl ft=man nomod

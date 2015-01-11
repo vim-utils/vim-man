@@ -2,6 +2,7 @@
 
 ### master
 
+- use `keepjumps` so that jumplist is not messed up
 - drop support for vim versions 5 and 6
 - remove script headers, give credits to the authors in the README
 - remove tab characters from the source and whitespace cleanup
