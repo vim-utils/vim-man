@@ -59,7 +59,7 @@ function! man#get_page(...)
       new
     endif
   endif
-  silent exec "edit $HOME/".page.".".sect."~"
+  call s:set_manpage_buffer_name(page, sect)
 
   setlocal modifiable
   silent keepj norm! 1GdG
@@ -134,6 +134,14 @@ function! s:remove_blank_lines_from_top_and_bottom()
     silent keepj norm! Gdd
   endwhile
   silent keepj norm! gg
+endfunction
+
+function! s:set_manpage_buffer_name(page, section)
+  if a:section
+    silent exec 'edit '.a:page.'('.a:section.')\ manpage'
+  else
+    silent exec 'edit '.a:page.'\ manpage'
+  endif
 endfunction
 
 " vim:set ft=vim et sw=2:
