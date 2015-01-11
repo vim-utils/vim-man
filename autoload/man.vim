@@ -68,14 +68,7 @@ function! man#get_page(...)
   silent keepj norm! 1GdG
   let $MANWIDTH = winwidth(0)
   silent exec "r!/usr/bin/man ".s:get_cmd_arg(sect, page)." | col -b"
-  " Remove blank lines from top and bottom.
-  while getline(1) =~ '^\s*$'
-    silent keepj norm! ggdd
-  endwhile
-  while getline('$') =~ '^\s*$'
-    silent keepj norm! Gdd
-  endwhile
-  silent keepj norm! gg
+  call s:remove_blank_lines_from_top_and_bottom()
   setlocal filetype=man nomodifiable
   setlocal bufhidden=hide
   setlocal nobuflisted
@@ -135,6 +128,16 @@ function! s:manpage_exists(sect, page)
     " found a manpage
     return 1
   endif
+endfunction
+
+function! s:remove_blank_lines_from_top_and_bottom()
+  while getline(1) =~ '^\s*$'
+    silent keepj norm! ggdd
+  endwhile
+  while getline('$') =~ '^\s*$'
+    silent keepj norm! Gdd
+  endwhile
+  silent keepj norm! gg
 endfunction
 
 " vim:set ft=vim et sw=2:
