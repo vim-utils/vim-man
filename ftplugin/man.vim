@@ -12,6 +12,17 @@ endif
 " allow dot and dash in manual page name.
 setlocal iskeyword+=\.,-
 
+setlocal nonumber
+setlocal norelativenumber
+setlocal foldcolumn=0
+setlocal nofoldenable
+
+" scratch buffer options
+setlocal buftype=nofile
+setlocal bufhidden=hide
+setlocal nobuflisted
+setlocal noswapfile
+
 " Add mappings, unless the user didn't want this.
 if !exists("no_plugin_maps") && !exists("no_man_maps")
   if !hasmapto('<Plug>ManBS')

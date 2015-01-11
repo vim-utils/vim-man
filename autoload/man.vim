@@ -57,21 +57,17 @@ function! man#get_page(...)
     endif
     if &filetype != "man"
       new
-      setlocal nonumber foldcolumn=0
     endif
   endif
   silent exec "edit $HOME/".page.".".sect."~"
-  " Avoid warning for editing the dummy file twice
-  setlocal buftype=nofile noswapfile
 
-  setlocal modifiable nonumber norelativenumber nofoldenable
+  setlocal modifiable
   silent keepj norm! 1GdG
   let $MANWIDTH = winwidth(0)
   silent exec "r!/usr/bin/man ".s:get_cmd_arg(sect, page)." | col -b"
   call s:remove_blank_lines_from_top_and_bottom()
-  setlocal filetype=man nomodifiable
-  setlocal bufhidden=hide
-  setlocal nobuflisted
+  setlocal filetype=man
+  setlocal nomodifiable
 endfunction
 
 function! man#pre_get_page(cnt)
