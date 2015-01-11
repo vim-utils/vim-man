@@ -1,14 +1,3 @@
-" Vim syntax file
-" Language: Man page
-" Maintainer: SungHyun Nam <goweol@gmail.com>
-" Previous Maintainer:  Gautam H. Mudunuri <gmudunur@informatica.com>
-" Version Info:
-" Last Change: 2008 Sep 17
-
-" Additional highlighting by Johannes Tanzler <johannes.tanzler@aon.at>:
-" * manSubHeading
-" * manSynopsis (only for sections 2 and 3)
-
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
 if version < 600

@@ -1,8 +1,3 @@
-" Vim filetype plugin file
-" Language: man
-" Maintainer: SungHyun Nam <goweol@gmail.com>
-" Last Change: 2013 Jul 17
-
 if exists("b:did_ftplugin")
   finish
 endif
