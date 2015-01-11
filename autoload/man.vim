@@ -22,7 +22,7 @@ func man#get_page(...)
     return
   endif
 
-  " To support:	    nmap K :Man <cword>
+  " To support:  nmap K :Man <cword>
   if page == '<cword>'
     let page = expand('<cword>')
   endif
@@ -134,3 +134,5 @@ func man#find_page(sect, page)
   endif
   return 1
 endfunc
+
+" vim:set ft=vim et sw=2:

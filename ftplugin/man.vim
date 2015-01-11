@@ -1,7 +1,7 @@
 " Vim filetype plugin file
-" Language:	man
-" Maintainer:	SungHyun Nam <goweol@gmail.com>
-" Last Change:	2013 Jul 17
+" Language: man
+" Maintainer: SungHyun Nam <goweol@gmail.com>
+" Last Change: 2013 Jul 17
 
 if exists("b:did_ftplugin")
   finish
@@ -29,3 +29,5 @@ if !exists("no_plugin_maps") && !exists("no_man_maps")
 endif
 
 let b:undo_ftplugin = "setlocal iskeyword<"
+
+" vim:set ft=vim et sw=2:

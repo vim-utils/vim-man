@@ -1,7 +1,7 @@
 " Vim filetype plugin file
-" Language:	man
-" Maintainer:	SungHyun Nam <goweol@gmail.com>
-" Last Change:	2013 Jul 17
+" Language: man
+" Maintainer: SungHyun Nam <goweol@gmail.com>
+" Last Change: 2013 Jul 17
 
 if exists('g:loaded_man') && g:loaded_man
   finish
@@ -19,4 +19,4 @@ endif
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set sw=2:
+" vim:set ft=vim et sw=2:
