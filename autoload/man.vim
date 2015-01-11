@@ -11,7 +11,7 @@ catch /E145:/
   " Ignore the error in restricted mode
 endtry
 
-func man#get_page(...)
+function! man#get_page(...)
   if a:0 >= 2
     let sect = a:1
     let page = a:2
@@ -42,14 +42,14 @@ func man#get_page(...)
   " Use an existing "man" window if it exists, otherwise open a new one.
   if &filetype != "man"
     let thiswin = winnr()
-    exe "norm! \<C-W>b"
+    exec "norm! \<C-W>b"
     if winnr() > 1
-      exe "norm! " . thiswin . "\<C-W>w"
+      exec "norm! " . thiswin . "\<C-W>w"
       while 1
         if &filetype == "man"
           break
         endif
-        exe "norm! \<C-W>w"
+        exec "norm! \<C-W>w"
         if thiswin == winnr()
           break
         endif
@@ -57,14 +57,14 @@ func man#get_page(...)
     endif
     if &filetype != "man"
       new
-      setl nonu fdc=0
+      setlocal nonumber foldcolumn=0
     endif
   endif
   silent exec "edit $HOME/".page.".".sect."~"
   " Avoid warning for editing the dummy file twice
-  setl buftype=nofile noswapfile
+  setlocal buftype=nofile noswapfile
 
-  setl ma nonu nornu nofen
+  setlocal modifiable nonumber norelativenumber nofoldenable
   silent keepj norm! 1GdG
   let $MANWIDTH = winwidth(0)
   silent exec "r!/usr/bin/man ".man#get_cmd_arg(sect, page)." | col -b"
@@ -76,15 +76,15 @@ func man#get_page(...)
     silent keepj norm! Gdd
   endwhile
   1
-  setl ft=man nomod
-  setl bufhidden=hide
-  setl nobuflisted
-endfunc
+  setlocal filetype=man nomodifiable
+  setlocal bufhidden=hide
+  setlocal nobuflisted
+endfunction
 
-func man#pre_get_page(cnt)
+function! man#pre_get_page(cnt)
   if a:cnt == 0
     let old_isk = &iskeyword
-    setl iskeyword+=(,)
+    setlocal iskeyword+=(,)
     let str = expand("<cword>")
     let &l:iskeyword = old_isk
     let page = substitute(str, '(*\(\k\+\).*', '\1', '')
@@ -100,9 +100,9 @@ func man#pre_get_page(cnt)
     let page = expand("<cword>")
   endif
   call man#get_page(sect, page)
-endfunc
+endfunction
 
-func man#pop_page()
+function! man#pop_page()
   if s:man_tag_depth > 0
     let s:man_tag_depth = s:man_tag_depth - 1
     exec "let s:man_tag_buf=s:man_tag_buf_".s:man_tag_depth
@@ -116,16 +116,16 @@ func man#pop_page()
     exec "unlet s:man_tag_col_".s:man_tag_depth
     unlet s:man_tag_buf s:man_tag_lin s:man_tag_col
   endif
-endfunc
+endfunction
 
-func man#get_cmd_arg(sect, page)
+function! man#get_cmd_arg(sect, page)
   if a:sect == ''
     return a:page
   endif
   return s:man_sect_arg.' '.a:sect.' '.a:page
-endfunc
+endfunction
 
-func man#find_page(sect, page)
+function! man#find_page(sect, page)
   let where = system("/usr/bin/man ".s:man_find_arg.' '.man#get_cmd_arg(a:sect, a:page))
   if where !~ "^/"
     if matchstr(where, " [^ ]*$") !~ "^ /"
@@ -133,6 +133,6 @@ func man#find_page(sect, page)
     endif
   endif
   return 1
-endfunc
+endfunction
 
 " vim:set ft=vim et sw=2:
