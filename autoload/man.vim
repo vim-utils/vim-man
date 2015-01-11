@@ -60,14 +60,7 @@ function! man#get_page(...)
     endif
   endif
   call s:set_manpage_buffer_name(page, sect)
-
-  setlocal modifiable
-  silent keepj norm! 1GdG
-  let $MANWIDTH = winwidth(0)
-  silent exec "r!/usr/bin/man ".s:get_cmd_arg(sect, page)." | col -b"
-  call s:remove_blank_lines_from_top_and_bottom()
-  setlocal filetype=man
-  setlocal nomodifiable
+  call s:load_manpage_text(page, sect)
 endfunction
 
 function! man#pre_get_page(cnt)
@@ -107,6 +100,8 @@ function! man#pop_page()
   endif
 endfunction
 
+" helper functions {{{1
+
 function! s:get_cmd_arg(sect, page)
   if a:sect == ''
     return a:page
@@ -143,5 +138,17 @@ function! s:set_manpage_buffer_name(page, section)
     silent exec 'edit '.a:page.'\ manpage'
   endif
 endfunction
+
+function! s:load_manpage_text(page, section)
+  setlocal modifiable
+  silent keepj norm! 1GdG
+  let $MANWIDTH = winwidth(0)
+  silent exec 'r!/usr/bin/man '.s:get_cmd_arg(a:section, a:page).' | col -b'
+  call s:remove_blank_lines_from_top_and_bottom()
+  setlocal filetype=man
+  setlocal nomodifiable
+endfunction
+
+" }}}
 
 " vim:set ft=vim et sw=2:
