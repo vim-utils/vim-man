@@ -13,3 +13,4 @@
 - update manpage buffer name
 - `:Vman` - opens a manpage in vertical split
 - add `:Sman` (the same as `:Man`) for "interface" consistency
+- `tabstop=8` for manpages

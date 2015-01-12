@@ -4,7 +4,7 @@ endif
 let b:did_ftplugin = 1
 
 " Ensure Vim is not recursively invoked (man-db does this)
-" when doing ctrl-[ on a man page reference.
+" when doing ctrl-] on a man page reference.
 if exists('$MANPAGER')
   let $MANPAGER = ''
 endif
@@ -16,6 +16,9 @@ setlocal nonumber
 setlocal norelativenumber
 setlocal foldcolumn=0
 setlocal nofoldenable
+
+" tabs in man pages are 8 spaces
+setlocal tabstop=8
 
 " scratch buffer options
 setlocal buftype=nofile
