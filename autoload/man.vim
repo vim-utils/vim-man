@@ -1,3 +1,5 @@
+" variable initialization {{{1
+
 let s:man_tag_depth = 0
 
 let s:man_sect_arg = ''
@@ -10,6 +12,9 @@ try
 catch /E145:/
   " Ignore the error in restricted mode
 endtry
+
+" }}}
+" man#get_page {{{1
 
 function! man#get_page(split_type, ...)
   if a:0 == 1
@@ -41,6 +46,9 @@ function! man#get_page(split_type, ...)
   call s:load_manpage_text(page, sect)
 endfunction
 
+" }}}
+" man#get_page_from_cword {{{1
+
 function! man#get_page_from_cword(cnt)
   if a:cnt == 0
     " trying to determine manpage section from a word like this 'printf(3)'
@@ -60,6 +68,9 @@ function! man#get_page_from_cword(cnt)
   call man#get_page('horizontal', sect, page)
 endfunction
 
+" }}}
+" man#pop_page {{{1
+
 function! man#pop_page()
   if s:man_tag_depth <= 0
     return
@@ -76,6 +87,9 @@ function! man#pop_page()
   unlet s:man_tag_lin_{s:man_tag_depth}
   unlet s:man_tag_col_{s:man_tag_depth}
 endfunction
+
+" }}}
+" man#section_movement {{{1
 
 function! man#section_movement(direction, mode, count)
   norm! m'
@@ -97,6 +111,7 @@ function! man#section_movement(direction, mode, count)
   endwhile
 endfunction
 
+" }}}
 " helper functions {{{1
 
 function! s:get_cmd_arg(sect, page)

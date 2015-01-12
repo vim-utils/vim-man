@@ -9,6 +9,8 @@ if exists('$MANPAGER')
   let $MANPAGER = ''
 endif
 
+" buffer local options {{{1
+
 " allow dot and dash in manual page name.
 setlocal iskeyword+=\.,-
 
@@ -25,6 +27,9 @@ setlocal buftype=nofile
 setlocal bufhidden=hide
 setlocal nobuflisted
 setlocal noswapfile
+
+" }}}
+" mappings {{{1
 
 " Add mappings, unless the user didn't want this.
 if !exists('no_plugin_maps') && !exists('no_man_maps')
@@ -52,6 +57,8 @@ if !exists('no_plugin_maps') && !exists('no_man_maps')
   xnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'v', v:count1)<CR>
   xnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'v', v:count1)<CR>
 endif
+
+" }}}
 
 let b:undo_ftplugin = 'setlocal iskeyword<'
 
