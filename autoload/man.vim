@@ -41,18 +41,16 @@ function! man#get_page(...)
   call s:load_manpage_text(page, sect)
 endfunction
 
-function! man#pre_get_page(cnt)
+function! man#get_page_from_cword(cnt)
   if a:cnt == 0
+    " trying to determine manpage section from a word like this 'printf(3)'
     let old_isk = &iskeyword
     setlocal iskeyword+=(,)
     let str = expand('<cword>')
     let &l:iskeyword = old_isk
     let page = substitute(str, '(*\(\k\+\).*', '\1', '')
     let sect = substitute(str, '\(\k\+\)(\([^()]*\)).*', '\2', '')
-    if match(sect, '^[0-9 ]\+$') == -1
-      let sect = ''
-    endif
-    if sect == page
+    if sect !~# '^[0-9 ]\+$' || sect == page
       let sect = ''
     endif
   else

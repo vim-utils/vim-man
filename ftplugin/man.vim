@@ -30,7 +30,7 @@ if !exists('no_plugin_maps') && !exists('no_man_maps')
   endif
   nnoremap <buffer> <Plug>ManBS :%s/.\b//g<CR>:setlocal nomod<CR>''
 
-  nnoremap <buffer> <c-]> :call man#pre_get_page(v:count)<CR>
+  nnoremap <buffer> <c-]> :call man#get_page_from_cword(v:count)<CR>
   nnoremap <buffer> <c-t> :call man#pop_page()<CR>
 endif
 
