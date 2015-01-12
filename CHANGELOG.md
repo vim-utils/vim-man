@@ -2,7 +2,8 @@
 
 ### master
 
-- Vman - opens a manpage in vertical split
+- add `:Sman` (the same as `:Man`) for "interface" consistency
+- `:Vman` - opens a manpage in vertical split
 - update manpage buffer name
 - move scratch buffer local options to ft file
 - improve error message shown when man page is not found
