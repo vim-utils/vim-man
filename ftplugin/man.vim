@@ -46,6 +46,11 @@ if !exists('no_plugin_maps') && !exists('no_man_maps')
   nnoremap <buffer> <C-W>g}     :call man#get_page_from_cword(v:count)<CR>
 
   nnoremap <buffer> <C-T> :call man#pop_page()<CR>
+
+  nnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'n', v:count1)<CR>
+  nnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'n', v:count1)<CR>
+  xnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'v', v:count1)<CR>
+  xnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'v', v:count1)<CR>
 endif
 
 let b:undo_ftplugin = 'setlocal iskeyword<'

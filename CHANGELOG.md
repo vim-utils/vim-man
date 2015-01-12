@@ -15,3 +15,4 @@
 - add `:Sman` (the same as `:Man`) for "interface" consistency
 - `tabstop=8` for manpages
 - add all tag mappings and map them to the same action
+- [[ and ]] mappings for section movement

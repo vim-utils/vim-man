@@ -77,6 +77,26 @@ function! man#pop_page()
   unlet s:man_tag_col_{s:man_tag_depth}
 endfunction
 
+function! man#section_movement(direction, mode, count)
+  norm! m'
+  if a:mode ==# 'v'
+    norm! gv
+  endif
+  let i = 0
+  while i < a:count
+    let i += 1
+    " saving current position
+    let line = line('.')
+    let col  = col('.')
+    let pos = search('^\S\+', 'W'.a:direction)
+    " if there are no more matches, return to last position
+    if pos == 0
+      call cursor(line, col)
+      return
+    endif
+  endwhile
+endfunction
+
 " helper functions {{{1
 
 function! s:get_cmd_arg(sect, page)
