@@ -34,11 +34,8 @@ function! man#get_page(...)
     echohl ErrorMSG | echo "No manual entry for '".page."'." | echohl NONE
     return
   endif
-  exec "let s:man_tag_buf_".s:man_tag_depth." = ".bufnr("%")
-  exec "let s:man_tag_lin_".s:man_tag_depth." = ".line(".")
-  exec "let s:man_tag_col_".s:man_tag_depth." = ".col(".")
-  let s:man_tag_depth = s:man_tag_depth + 1
 
+  call s:update_man_tag_variables()
   call s:get_new_or_existing_man_window()
   call s:set_manpage_buffer_name(page, sect)
   call s:load_manpage_text(page, sect)
@@ -150,6 +147,13 @@ function! s:get_new_or_existing_man_window()
       new
     endif
   endif
+endfunction
+
+function! s:update_man_tag_variables()
+  exec 'let s:man_tag_buf_'.s:man_tag_depth.' = '.bufnr('%')
+  exec 'let s:man_tag_lin_'.s:man_tag_depth.' = '.line('.')
+  exec 'let s:man_tag_col_'.s:man_tag_depth.' = '.col('.')
+  let s:man_tag_depth = s:man_tag_depth + 1
 endfunction
 
 " }}}
