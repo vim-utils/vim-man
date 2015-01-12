@@ -39,26 +39,7 @@ function! man#get_page(...)
   exec "let s:man_tag_col_".s:man_tag_depth." = ".col(".")
   let s:man_tag_depth = s:man_tag_depth + 1
 
-  " Use an existing "man" window if it exists, otherwise open a new one.
-  if &filetype != "man"
-    let thiswin = winnr()
-    exec "norm! \<C-W>b"
-    if winnr() > 1
-      exec "norm! " . thiswin . "\<C-W>w"
-      while 1
-        if &filetype == "man"
-          break
-        endif
-        exec "norm! \<C-W>w"
-        if thiswin == winnr()
-          break
-        endif
-      endwhile
-    endif
-    if &filetype != "man"
-      new
-    endif
-  endif
+  call s:get_new_or_existing_man_window()
   call s:set_manpage_buffer_name(page, sect)
   call s:load_manpage_text(page, sect)
 endfunction
@@ -147,6 +128,28 @@ function! s:load_manpage_text(page, section)
   call s:remove_blank_lines_from_top_and_bottom()
   setlocal filetype=man
   setlocal nomodifiable
+endfunction
+
+function! s:get_new_or_existing_man_window()
+  if &filetype != 'man'
+    let thiswin = winnr()
+    exec "norm! \<C-W>b"
+    if winnr() > 1
+      exec 'norm! '.thiswin."\<C-W>w"
+      while 1
+        if &filetype == 'man'
+          break
+        endif
+        exec "norm! \<C-W>w"
+        if thiswin == winnr()
+          break
+        endif
+      endwhile
+    endif
+    if &filetype != 'man'
+      new
+    endif
+  endif
 endfunction
 
 " }}}
