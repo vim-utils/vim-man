@@ -61,19 +61,20 @@ function! man#get_page_from_cword(cnt)
 endfunction
 
 function! man#pop_page()
-  if s:man_tag_depth > 0
-    let s:man_tag_depth = s:man_tag_depth - 1
-    exec 'let s:man_tag_buf=s:man_tag_buf_'.s:man_tag_depth
-    exec 'let s:man_tag_lin=s:man_tag_lin_'.s:man_tag_depth
-    exec 'let s:man_tag_col=s:man_tag_col_'.s:man_tag_depth
-    exec s:man_tag_buf.'b'
-    exec s:man_tag_lin
-    exec 'norm '.s:man_tag_col.'|'
-    exec 'unlet s:man_tag_buf_'.s:man_tag_depth
-    exec 'unlet s:man_tag_lin_'.s:man_tag_depth
-    exec 'unlet s:man_tag_col_'.s:man_tag_depth
-    unlet s:man_tag_buf s:man_tag_lin s:man_tag_col
+  if s:man_tag_depth <= 0
+    return
   endif
+  let s:man_tag_depth -= 1
+  let buffer = s:man_tag_buf_{s:man_tag_depth}
+  let line   = s:man_tag_lin_{s:man_tag_depth}
+  let column = s:man_tag_col_{s:man_tag_depth}
+  " jumps to exact buffer, line and column
+  exec buffer.'b'
+  exec line
+  exec 'norm! '.column.'|'
+  unlet s:man_tag_buf_{s:man_tag_depth}
+  unlet s:man_tag_lin_{s:man_tag_depth}
+  unlet s:man_tag_col_{s:man_tag_depth}
 endfunction
 
 " helper functions {{{1
@@ -152,10 +153,10 @@ function! s:get_new_or_existing_man_window(split_type)
 endfunction
 
 function! s:update_man_tag_variables()
-  exec 'let s:man_tag_buf_'.s:man_tag_depth.' = '.bufnr('%')
-  exec 'let s:man_tag_lin_'.s:man_tag_depth.' = '.line('.')
-  exec 'let s:man_tag_col_'.s:man_tag_depth.' = '.col('.')
-  let s:man_tag_depth = s:man_tag_depth + 1
+  let s:man_tag_buf_{s:man_tag_depth} = bufnr('%')
+  let s:man_tag_lin_{s:man_tag_depth} = line('.')
+  let s:man_tag_col_{s:man_tag_depth} = col('.')
+  let s:man_tag_depth += 1
 endfunction
 
 " }}}
