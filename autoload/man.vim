@@ -11,7 +11,7 @@ catch /E145:/
   " Ignore the error in restricted mode
 endtry
 
-function! man#get_page(...)
+function! man#get_page(split_type, ...)
   if a:0 == 1
     let sect = ''
     let page = a:1
@@ -36,7 +36,7 @@ function! man#get_page(...)
   endif
 
   call s:update_man_tag_variables()
-  call s:get_new_or_existing_man_window()
+  call s:get_new_or_existing_man_window(a:split_type)
   call s:set_manpage_buffer_name(page, sect)
   call s:load_manpage_text(page, sect)
 endfunction
@@ -57,7 +57,7 @@ function! man#get_page_from_cword(cnt)
     let sect = a:cnt
     let page = expand('<cword>')
   endif
-  call man#get_page(sect, page)
+  call man#get_page('horizontal', sect, page)
 endfunction
 
 function! man#pop_page()
@@ -125,7 +125,7 @@ function! s:load_manpage_text(page, section)
   setlocal nomodifiable
 endfunction
 
-function! s:get_new_or_existing_man_window()
+function! s:get_new_or_existing_man_window(split_type)
   if &filetype != 'man'
     let thiswin = winnr()
     exec "norm! \<C-W>b"
@@ -142,7 +142,11 @@ function! s:get_new_or_existing_man_window()
       endwhile
     endif
     if &filetype != 'man'
-      new
+      if a:split_type == 'vertical'
+        vnew
+      else
+        new
+      endif
     endif
   endif
 endfunction

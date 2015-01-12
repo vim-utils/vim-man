@@ -7,7 +7,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 if exists(':Man') != 2
-  command! -nargs=+ Man call man#get_page(<f-args>)
+  command! -nargs=+ Man  call man#get_page('horizontal', <f-args>)
+  command! -nargs=+ Vman call man#get_page('vertical',   <f-args>)
   nmap <Leader>K :call man#get_page_from_cword(0)<CR>
 endif
 
