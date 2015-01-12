@@ -16,3 +16,5 @@
 - `tabstop=8` for manpages
 - add all tag mappings and map them to the same action
 - [[ and ]] mappings for section movement
+- remove the mapping "guards". If the user installed the plugin, they are most
+  likely wanted.

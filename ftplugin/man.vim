@@ -31,32 +31,29 @@ setlocal noswapfile
 " }}}
 " mappings {{{1
 
-" Add mappings, unless the user didn't want this.
-if !exists('no_plugin_maps') && !exists('no_man_maps')
-  if !hasmapto('<Plug>ManBS')
-    nmap <buffer> <LocalLeader>h <Plug>ManBS
-  endif
-  nnoremap <buffer> <Plug>ManBS :%s/.\b//g<CR>:setlocal nomod<CR>''
-
-  " All tag mappings are defined for completeness. They all perform the same
-  " action.
-  nnoremap <buffer> <C-]>       :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> g<C-]>      :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> g]          :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W>]      :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W><C-]>  :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W>g<C-]> :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W>g]     :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W>}      :call man#get_page_from_cword(v:count)<CR>
-  nnoremap <buffer> <C-W>g}     :call man#get_page_from_cword(v:count)<CR>
-
-  nnoremap <buffer> <C-T> :call man#pop_page()<CR>
-
-  nnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'n', v:count1)<CR>
-  nnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'n', v:count1)<CR>
-  xnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'v', v:count1)<CR>
-  xnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'v', v:count1)<CR>
+if !hasmapto('<Plug>ManBS')
+  nmap <buffer> <LocalLeader>h <Plug>ManBS
 endif
+nnoremap <buffer> <Plug>ManBS :%s/.\b//g<CR>:setlocal nomod<CR>''
+
+" All tag mappings are defined for completeness. They all perform the same
+" action.
+nnoremap <buffer> <C-]>       :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> g<C-]>      :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> g]          :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W>]      :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W><C-]>  :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W>g<C-]> :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W>g]     :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W>}      :call man#get_page_from_cword(v:count)<CR>
+nnoremap <buffer> <C-W>g}     :call man#get_page_from_cword(v:count)<CR>
+
+nnoremap <buffer> <C-T> :call man#pop_page()<CR>
+
+nnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'n', v:count1)<CR>
+nnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'n', v:count1)<CR>
+xnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'v', v:count1)<CR>
+xnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'v', v:count1)<CR>
 
 " }}}
 
