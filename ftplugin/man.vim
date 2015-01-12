@@ -1,12 +1,12 @@
-if exists("b:did_ftplugin")
+if exists('b:did_ftplugin')
   finish
 endif
 let b:did_ftplugin = 1
 
 " Ensure Vim is not recursively invoked (man-db does this)
 " when doing ctrl-[ on a man page reference.
-if exists("$MANPAGER")
-  let $MANPAGER = ""
+if exists('$MANPAGER')
+  let $MANPAGER = ''
 endif
 
 " allow dot and dash in manual page name.
@@ -24,7 +24,7 @@ setlocal nobuflisted
 setlocal noswapfile
 
 " Add mappings, unless the user didn't want this.
-if !exists("no_plugin_maps") && !exists("no_man_maps")
+if !exists('no_plugin_maps') && !exists('no_man_maps')
   if !hasmapto('<Plug>ManBS')
     nmap <buffer> <LocalLeader>h <Plug>ManBS
   endif
@@ -34,6 +34,6 @@ if !exists("no_plugin_maps") && !exists("no_man_maps")
   nnoremap <buffer> <c-t> :call man#pop_page()<CR>
 endif
 
-let b:undo_ftplugin = "setlocal iskeyword<"
+let b:undo_ftplugin = 'setlocal iskeyword<'
 
 " vim:set ft=vim et sw=2:

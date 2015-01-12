@@ -1,23 +1,23 @@
 let s:man_tag_depth = 0
 
-let s:man_sect_arg = ""
-let s:man_find_arg = "-w"
+let s:man_sect_arg = ''
+let s:man_find_arg = '-w'
 try
-  if !has("win32") && $OSTYPE !~ 'cygwin\|linux' && system('uname -s') =~ "SunOS" && system('uname -r') =~ "^5"
-    let s:man_sect_arg = "-s"
-    let s:man_find_arg = "-l"
+  if !has('win32') && $OSTYPE !~ 'cygwin\|linux' && system('uname -s') =~ 'SunOS' && system('uname -r') =~ '^5'
+    let s:man_sect_arg = '-s'
+    let s:man_find_arg = '-l'
   endif
 catch /E145:/
   " Ignore the error in restricted mode
 endtry
 
 function! man#get_page(...)
-  if a:0 >= 2
+  if a:0 == 1
+    let sect = ''
+    let page = a:1
+  elseif a:0 >= 2
     let sect = a:1
     let page = a:2
-  elseif a:0 >= 1
-    let sect = ""
-    let page = a:1
   else
     return
   endif
@@ -27,8 +27,8 @@ function! man#get_page(...)
     let page = expand('<cword>')
   endif
 
-  if sect != "" && !s:manpage_exists(sect, page)
-    let sect = ""
+  if sect != '' && !s:manpage_exists(sect, page)
+    let sect = ''
   endif
   if !s:manpage_exists(sect, page)
     echohl ErrorMSG | echo "No manual entry for '".page."'." | echohl NONE
@@ -45,19 +45,19 @@ function! man#pre_get_page(cnt)
   if a:cnt == 0
     let old_isk = &iskeyword
     setlocal iskeyword+=(,)
-    let str = expand("<cword>")
+    let str = expand('<cword>')
     let &l:iskeyword = old_isk
     let page = substitute(str, '(*\(\k\+\).*', '\1', '')
     let sect = substitute(str, '\(\k\+\)(\([^()]*\)).*', '\2', '')
     if match(sect, '^[0-9 ]\+$') == -1
-      let sect = ""
+      let sect = ''
     endif
     if sect == page
-      let sect = ""
+      let sect = ''
     endif
   else
     let sect = a:cnt
-    let page = expand("<cword>")
+    let page = expand('<cword>')
   endif
   call man#get_page(sect, page)
 endfunction
@@ -65,15 +65,15 @@ endfunction
 function! man#pop_page()
   if s:man_tag_depth > 0
     let s:man_tag_depth = s:man_tag_depth - 1
-    exec "let s:man_tag_buf=s:man_tag_buf_".s:man_tag_depth
-    exec "let s:man_tag_lin=s:man_tag_lin_".s:man_tag_depth
-    exec "let s:man_tag_col=s:man_tag_col_".s:man_tag_depth
-    exec s:man_tag_buf."b"
+    exec 'let s:man_tag_buf=s:man_tag_buf_'.s:man_tag_depth
+    exec 'let s:man_tag_lin=s:man_tag_lin_'.s:man_tag_depth
+    exec 'let s:man_tag_col=s:man_tag_col_'.s:man_tag_depth
+    exec s:man_tag_buf.'b'
     exec s:man_tag_lin
-    exec "norm ".s:man_tag_col."|"
-    exec "unlet s:man_tag_buf_".s:man_tag_depth
-    exec "unlet s:man_tag_lin_".s:man_tag_depth
-    exec "unlet s:man_tag_col_".s:man_tag_depth
+    exec 'norm '.s:man_tag_col.'|'
+    exec 'unlet s:man_tag_buf_'.s:man_tag_depth
+    exec 'unlet s:man_tag_lin_'.s:man_tag_depth
+    exec 'unlet s:man_tag_col_'.s:man_tag_depth
     unlet s:man_tag_buf s:man_tag_lin s:man_tag_col
   endif
 endfunction

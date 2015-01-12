@@ -6,7 +6,7 @@ let g:loaded_man = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if exists(":Man") != 2
+if exists(':Man') != 2
   command! -nargs=+ Man call man#get_page(<f-args>)
   nmap <Leader>K :call man#pre_get_page(0)<CR>
 endif
