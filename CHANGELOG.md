@@ -19,3 +19,4 @@
 - remove the mapping "guards". If the user installed the plugin, they are most
   likely wanted.
 - enable <bar> (in vim's command line) to follow man commands
+- command line completion for `:Man`, `:Sman` and `:Vman` commands

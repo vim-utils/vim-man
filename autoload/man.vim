@@ -112,6 +112,73 @@ function! man#section_movement(direction, mode, count)
 endfunction
 
 " }}}
+" man#command_completion {{{1
+
+function! man#command_completion(A, L, P)
+  let manpath = s:get_manpath()
+  let section = s:get_manpage_section(a:L)
+  let path_glob = s:get_path_glob(manpath.':', section, a:A)
+  let matching_files = s:expand_path_glob(path_glob)
+  return s:strip_file_names(matching_files)
+endfunction
+
+" extracts the manpage section number (if there is one) from the command
+function! s:get_manpage_section(line)
+  let matched_number = matchstr(a:line, '^\s*\S\+\s\+\zs\d\+\ze')
+  " section numbers can be only single digits 1 to 9
+  if matched_number =~# '^[1-9]$'
+    return matched_number
+  else
+    return ''
+  endif
+endfunction
+
+" fetches a colon separated list of paths where manpages are stored
+function! s:get_manpath()
+  " We don't expect manpath to change, so after first invocation it's
+  " saved/cached in a script variable to speed things up on later invocations.
+  if !exists('s:manpath')
+    " perform a series of commands until manpath is found
+    let s:manpath = system('manpath 2>/dev/null')
+    if s:manpath ==# ''
+      let s:manpath = system('man '.s:man_find_arg.' 2>/dev/null')
+      if s:manpath ==# '' && exists('$MANPATH')
+        let s:manpath = $MANPATH
+      endif
+    endif
+    " strip trailing newline for output from the shell
+    let s:manpath = substitute(s:manpath, '\n$', '', '')
+  endif
+  return s:manpath
+endfunction
+
+" creates a string containing shell globs suitable to finding matching manpages
+function! s:get_path_glob(manpath, section, manpage_prefix)
+  let manpage_part = empty(a:manpage_prefix) ? '' : a:manpage_prefix.'*'
+  let section_part = empty(a:section) ? '*' : a:section
+  let man_globs = substitute(a:manpath, ':', '/*man'.section_part.'/'.manpage_part.' ', 'g')
+  let cat_globs = substitute(a:manpath, ':', '/*cat'.section_part.'/'.manpage_part.' ', 'g')
+  return man_globs.' '.cat_globs
+endfunction
+
+" makes path glob expansion to get filenames
+function! s:expand_path_glob(path_glob)
+  return systemlist('ls '.a:path_glob.' 2>/dev/null')
+endfunction
+
+" strips file names so they correspond manpage names
+function! s:strip_file_names(matching_files)
+  let matches = a:matching_files
+  if !empty(matches)
+    " strip the directory name from matches
+    call map(matches, 'fnamemodify(v:val, ":t")')
+    " strip the extension from matches
+    call map(matches, 'substitute(v:val, ''\.\d\D*$'', "", "")')
+  endif
+  return matches
+endfunction
+
+" }}}
 " helper functions {{{1
 
 function! s:get_cmd_arg(sect, page)
