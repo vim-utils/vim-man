@@ -20,3 +20,5 @@
   likely wanted.
 - enable <bar> (in vim's command line) to follow man commands
 - command line completion for `:Man`, `:Sman` and `:Vman` commands
+- switch to different implementation for `strip_file_names` completion helper
+  function (vim's `map()` function errors out for larger lists)

@@ -168,14 +168,16 @@ endfunction
 
 " strips file names so they correspond manpage names
 function! s:strip_file_names(matching_files)
-  let matches = a:matching_files
-  if !empty(matches)
-    " strip the directory name from matches
-    call map(matches, 'fnamemodify(v:val, ":t")')
-    " strip the extension from matches
-    call map(matches, 'substitute(v:val, ''\.\d\D*$'', "", "")')
+  if empty(a:matching_files)
+    return []
+  else
+    let matches = []
+    for manpage_path in a:matching_files
+      " first strips the directory name from the match, then the extension
+      call extend(matches, [substitute(fnamemodify(manpage_path, ':t'), '\.\d\D*$', '', '')])
+    endfor
+    return matches
   endif
-  return matches
 endfunction
 
 " }}}
