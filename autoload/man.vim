@@ -179,7 +179,7 @@ function! s:strip_file_names(matching_files)
     let matches = []
     for manpage_path in a:matching_files
       " first strips the directory name from the match, then the extension
-      call extend(matches, [substitute(fnamemodify(manpage_path, ':t'), '\.\d\D*$', '', '')])
+      call add(matches, substitute(fnamemodify(manpage_path, ':t'), '\.\d\D*$', '', ''))
     endfor
     return matches
   endif
