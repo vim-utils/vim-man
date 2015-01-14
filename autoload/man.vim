@@ -127,7 +127,7 @@ endfunction
 
 " extracts the manpage section number (if there is one) from the command
 function! s:get_manpage_section(line)
-  let matched_number = matchstr(a:line, '^\s*\S\+\s\+\zs\d\+\ze')
+  let matched_number = matchstr(a:line, '^\s*\S\+\s\+\zs\d\S*')
   " section numbers can be only single digits 1 to 9
   if matched_number =~# '^[1-9]$'
     return matched_number
