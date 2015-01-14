@@ -185,9 +185,11 @@ function! s:strip_file_names(matching_files)
   endif
 endfunction
 
-" public function so it can be used for testing
+" Public function so it can be used for testing.
+" Check 'manpage_extension_stripping_test.vim' for example input and output
+" this regex produces.
 function! StripExtension(filename)
-  return substitute(a:filename, '\.\d\D*$', '', '')
+  return substitute(a:filename, '\.\(\d\a*\|n\|ntcl\)\(\.\a*\|\.bz2\)\?$', '', '')
 endfunction
 
 " }}}

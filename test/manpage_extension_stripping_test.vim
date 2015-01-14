@@ -91,8 +91,8 @@ let s:test_cases = [
       \ { 'in': 'TclX.n.gz',           'out': 'TclX' },
       \ { 'in': 'apply.ntcl',          'out': 'apply' },
       \ { 'in': 'apply.ntcl.gz',       'out': 'apply' },
-      \ { 'in': 'base32.n',            'out': 'base32.n' },
-      \ { 'in': 'base32.n.gz',         'out': 'base32.n' },
+      \ { 'in': 'base32.n',            'out': 'base32' },
+      \ { 'in': 'base32.n.gz',         'out': 'base32' },
       \ { 'in': 'ttk::button.ntcl',    'out': 'ttk::button' },
       \ { 'in': 'ttk::button.ntcl.gz', 'out': 'ttk::button' },
       \
