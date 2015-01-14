@@ -116,6 +116,9 @@ endfunction
 
 function! man#command_completion(A, L, P)
   let manpath = s:get_manpath()
+  if manpath =~# '^\s*$'
+    return []
+  endif
   let section = s:get_manpage_section(a:L)
   let path_glob = s:get_path_glob(manpath, section)
   let matching_files = s:expand_path_glob(path_glob, a:A)
