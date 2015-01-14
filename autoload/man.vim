@@ -117,8 +117,8 @@ endfunction
 function! man#command_completion(A, L, P)
   let manpath = s:get_manpath()
   let section = s:get_manpage_section(a:L)
-  let path_glob = s:get_path_glob(manpath.':', section, a:A)
-  let matching_files = s:expand_path_glob(path_glob)
+  let path_glob = s:get_path_glob(manpath, section)
+  let matching_files = s:expand_path_glob(path_glob, a:A)
   return s:strip_file_names(matching_files)
 endfunction
 
@@ -153,17 +153,19 @@ function! s:get_manpath()
 endfunction
 
 " creates a string containing shell globs suitable to finding matching manpages
-function! s:get_path_glob(manpath, section, manpage_prefix)
-  let manpage_part = empty(a:manpage_prefix) ? '' : a:manpage_prefix.'*'
+function! s:get_path_glob(manpath, section)
   let section_part = empty(a:section) ? '*' : a:section
-  let man_globs = substitute(a:manpath, ':', '/*man'.section_part.'/'.manpage_part.' ', 'g')
-  let cat_globs = substitute(a:manpath, ':', '/*cat'.section_part.'/'.manpage_part.' ', 'g')
-  return man_globs.' '.cat_globs
+  let man_globs = substitute(a:manpath.':', ':', '/*man'.section_part.'/,', 'g')
+  let cat_globs = substitute(a:manpath.':', ':', '/*cat'.section_part.'/,', 'g')
+  " remove one unecessary comma from the end
+  let cat_globs = substitute(cat_globs, ',$', '', '')
+  return man_globs.cat_globs
 endfunction
 
-" makes path glob expansion to get filenames
-function! s:expand_path_glob(path_glob)
-  return systemlist('ls '.a:path_glob.' 2>/dev/null')
+" path glob expansion to get filenames
+function! s:expand_path_glob(path_glob, manpage_prefix)
+  let manpage_part = empty(a:manpage_prefix) ? '*' : a:manpage_prefix.'*'
+  return globpath(a:path_glob, manpage_part, 1, 1)
 endfunction
 
 " strips file names so they correspond manpage names
