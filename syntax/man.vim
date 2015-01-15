@@ -7,7 +7,7 @@ runtime! syntax/ctrlh.vim
 
 syntax case ignore
 syntax match manReference       '\f\+(\([1-9][a-z]\=\)\?)'
-syntax match manTitle           '^\(\f\|:\|\s\)\+([0-9nlpo]\+[a-z]\+).*'
+syntax match manTitle           '^\(\f\|:\|\s\)\+([0-9nlpo]\+[a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
 syntax match manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
 syntax match manOptionDesc      '^\s*[+-][a-z0-9]\S*'
