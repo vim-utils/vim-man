@@ -187,11 +187,16 @@ function! s:strip_file_names(matching_files)
     return []
   else
     let matches = []
+    let len = 0
     for manpage_path in a:matching_files
+      " since already looping also count list length
+      let len += 1
       " first strips the directory name from the match, then the extension
       call add(matches, StripExtension(fnamemodify(manpage_path, ':t')))
     endfor
-    return matches
+    " remove duplicates from small lists (it takes noticeably longer
+    " and is less relevant for large lists)
+    return len > 500 ? matches : filter(matches, 'index(matches, v:val, v:key+1)==-1')
   endif
 endfunction
 

@@ -26,3 +26,4 @@
   filename stripping so it supports more cases.
 - improve manpage section argument handling for completion
 - $MANPATH environment variable has precedence when searching for manpath
+- remove duplicates from `:Man` command completion list
