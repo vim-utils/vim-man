@@ -17,7 +17,7 @@ syntax match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
 if getline(1) =~ '^[a-zA-Z_]\+([23])'
   syntax include @cCode syntax/c.vim
   syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
-  syntax region manSynopsis start='^SYNOPSIS'hs=s+8 end='^\u\+\s*$'me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
+  syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition
 endif
 
 hi def link manTitle           Title

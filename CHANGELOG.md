@@ -30,3 +30,4 @@
 - improve `[[` and `]]` mappings: manpage section can start only with letters
 - bugfix: manTitle syntax highlighting for TCL man pages
 - syntax highlighting for more functions in manpages
+- improved syntax highlighting for 'LEGACY SYNOPSIS' manpage section
