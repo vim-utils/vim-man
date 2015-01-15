@@ -6,10 +6,10 @@ endif
 runtime! syntax/ctrlh.vim
 
 syntax case ignore
-syntax match  manSectionHeading  '^[a-z][a-z ]*[a-z]$'
-syntax match  manSubHeading      '^\s\{3\}[a-z][a-z ]*[a-z]$'
 syntax match  manReference       '\f\+(\([1-9][a-z]\=\)\?)'
 syntax match  manTitle           '^\(\f\|:\)\+([0-9nlpo]\+[a-z]\=).*'
+syntax match  manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
+syntax match  manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
 syntax match  manOptionDesc      '^\s*[+-][a-z0-9]\S*'
 syntax match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
 syntax match  manHeaderFile      '<\f\+\.h>'
