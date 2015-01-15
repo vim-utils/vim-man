@@ -6,13 +6,14 @@ endif
 runtime! syntax/ctrlh.vim
 
 syntax case ignore
-syntax match  manReference       '\f\+(\([1-9][a-z]\=\)\?)'
-syntax match  manTitle           '^\(\f\|:\)\+([0-9nlpo]\+[a-z]\=).*'
-syntax match  manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
-syntax match  manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
-syntax match  manOptionDesc      '^\s*[+-][a-z0-9]\S*'
-syntax match  manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
-syntax match  manHeaderFile      '<\f\+\.h>'
+syntax match manReference       '\f\+(\([1-9][a-z]\=\)\?)'
+syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo]\+[a-z]\=).*'
+syntax match manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
+syntax match manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
+syntax match manOptionDesc      '^\s*[+-][a-z0-9]\S*'
+syntax match manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
+syntax match manHeaderFile      '<\f\+\.h>'
+syntax match manURL `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
 " syntax match  manHistory         '^[a-z].*last change.*$'
 
 if getline(1) =~ '^[a-zA-Z_]\+([23])'
@@ -29,6 +30,7 @@ hi def link manReference       PreProc
 hi def link manSubHeading      Function
 hi def link manCFuncDefinition Function
 hi def link manHeaderFile      String
+hi def link manURL             Underlined
 
 let b:current_syntax = 'man'
 
