@@ -28,3 +28,4 @@
 - $MANPATH environment variable has precedence when searching for manpath
 - remove duplicates from `:Man` command completion list
 - improve `[[` and `]]` mappings: manpage section can start only with letters
+- bugfix: manTitle syntax highlighting for TCL man pages
