@@ -119,21 +119,31 @@ function! man#command_completion(A, L, P)
   if manpath =~# '^\s*$'
     return []
   endif
-  let section = s:get_manpage_section(a:L)
+  let section = s:get_manpage_section(a:L, a:P)
   let path_glob = s:get_path_glob(manpath, section)
   let matching_files = s:expand_path_glob(path_glob, a:A)
   return s:strip_file_names(matching_files)
 endfunction
 
 " extracts the manpage section number (if there is one) from the command
-function! s:get_manpage_section(line)
-  let matched_number = matchstr(a:line, '^\s*\S\+\s\+\zs\d\S*')
-  " section numbers can be only single digits 1 to 9
-  if matched_number =~# '^[1-9]$'
-    return matched_number
-  else
-    return ''
+function! s:get_manpage_section(line, cursor_position)
+  " extracting section argument from the line
+  let leading_line = strpart(a:line, 0, a:cursor_position)
+  let section_arg = matchstr(leading_line, '^\s*\S\+\s\+\zs\S\+\ze\s\+')
+  if !empty(section_arg)
+    if section_arg =~# '^\d[xp]\?$'
+      " matches dirs: man1, man1x, man1p
+      return section_arg
+    elseif section_arg =~# '^[nlpo]$'
+      " matches dirs: mann, manl, manp, mano
+      return section_arg
+    elseif section_arg =~# '^\d\a\+$'
+      " take only first digit, sections 3pm, 3ssl, 3tiff, 3tcl are searched in man3
+      return matchstr(section_arg, '^\d')
+    endif
   endif
+  " no section arg or extracted section cannot be used for man dir name globbing
+  return ''
 endfunction
 
 " fetches a colon separated list of paths where manpages are stored
