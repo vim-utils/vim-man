@@ -102,7 +102,7 @@ function! man#section_movement(direction, mode, count)
     " saving current position
     let line = line('.')
     let col  = col('.')
-    let pos = search('^\S\+', 'W'.a:direction)
+    let pos = search('^\a\+', 'W'.a:direction)
     " if there are no more matches, return to last position
     if pos == 0
       call cursor(line, col)

@@ -27,3 +27,4 @@
 - improve manpage section argument handling for completion
 - $MANPATH environment variable has precedence when searching for manpath
 - remove duplicates from `:Man` command completion list
+- improve `[[` and `]]` mappings: manpage section can start only with letters
