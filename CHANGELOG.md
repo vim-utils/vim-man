@@ -25,3 +25,4 @@
 - implement tests for completion "strip extension" function. Improve manpage
   filename stripping so it supports more cases.
 - improve manpage section argument handling for completion
+- $MANPATH environment variable has precedence when searching for manpath

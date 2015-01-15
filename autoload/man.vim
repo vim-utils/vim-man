@@ -152,11 +152,11 @@ function! s:get_manpath()
   " saved/cached in a script variable to speed things up on later invocations.
   if !exists('s:manpath')
     " perform a series of commands until manpath is found
-    let s:manpath = system('manpath 2>/dev/null')
+    let s:manpath = $MANPATH
     if s:manpath ==# ''
-      let s:manpath = system('man '.s:man_find_arg.' 2>/dev/null')
-      if s:manpath ==# '' && exists('$MANPATH')
-        let s:manpath = $MANPATH
+      let s:manpath = system('manpath 2>/dev/null')
+      if s:manpath ==# ''
+        let s:manpath = system('man '.s:man_find_arg.' 2>/dev/null')
       endif
     endif
     " strip trailing newline for output from the shell
