@@ -17,7 +17,14 @@ endtry
 " man#get_page {{{1
 
 function! man#get_page(split_type, ...)
-  if a:0 == 1
+  if a:0 == 0
+    if &filetype ==# 'nroff'
+      return man#get_nroff_page(a:split_type, expand('%:p'))
+    else
+      " simulating vim's error when not enough args provided
+      call s:error('E471: Argument required')
+    endif
+  elseif a:0 == 1
     let sect = ''
     let page = a:1
   elseif a:0 >= 2
@@ -28,15 +35,15 @@ function! man#get_page(split_type, ...)
   endif
 
   " To support:  nmap K :Man <cword>
-  if page == '<cword>'
+  if page ==# '<cword>'
     let page = expand('<cword>')
   endif
 
-  if sect != '' && !s:manpage_exists(sect, page)
+  if sect !=# '' && !s:manpage_exists(sect, page)
     let sect = ''
   endif
   if !s:manpage_exists(sect, page)
-    echohl ErrorMSG | echo "No manual entry for '".page."'." | echohl NONE
+    call s:error("No manual entry for '".page."'.")
     return
   endif
 
@@ -44,6 +51,17 @@ function! man#get_page(split_type, ...)
   call s:get_new_or_existing_man_window(a:split_type)
   call s:set_manpage_buffer_name(page, sect)
   call s:load_manpage_text(page, sect)
+endfunction
+
+" }}}
+" man#get_nroff_page {{{1
+
+" open a nroff file as a manpage
+function! man#get_nroff_page(split_type, nroff_file)
+  call s:update_man_tag_variables()
+  call s:get_new_or_existing_man_window(a:split_type)
+  silent exec 'edit '.fnamemodify(a:nroff_file, ':t').'\ manpage\ (from\ nroff)'
+  call s:load_manpage_text(a:nroff_file, '')
 endfunction
 
 " }}}
@@ -212,6 +230,12 @@ endfunction
 
 " }}}
 " helper functions {{{1
+
+function! s:error(str)
+  echohl ErrorMsg
+  echomsg a:str
+  echohl None
+endfunction
 
 function! s:get_cmd_arg(sect, page)
   if a:sect == ''
