@@ -6,8 +6,8 @@ endif
 runtime! syntax/ctrlh.vim
 
 syntax case ignore
-syntax match manReference       '\f\+(\([1-9][a-z]\=\)\?)'
-syntax match manTitle           '^\(\f\|:\|\s\)\+([0-9nlpo]\+[a-z]*).*'
+syntax match manReference       '\(\f\|:\)\+(\([0-9nlpo][a-z]*\)\?)'
+syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
 syntax match manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
 syntax match manOptionDesc      '^\s*[+-][a-z0-9]\S*'
@@ -17,7 +17,7 @@ syntax match manURL `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|
 " syntax match  manHistory         '^[a-z].*last change.*$'
 
 " below syntax elements valid for manpages 2 & 3 only
-if getline(1) =~ '^\(\f\|:\|\s\)\+([23][px]\?)'
+if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
   syntax include @cCode syntax/c.vim
   syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
   syntax match manCError           display '^\s\+\[E\u\+\]' contained
