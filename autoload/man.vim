@@ -19,10 +19,16 @@ endtry
 function! man#get_page(split_type, ...)
   if a:0 == 0
     if &filetype ==# 'nroff'
-      return man#get_nroff_page(a:split_type, expand('%:p'))
+      " :Man command can be invoked without arguments in 'nroff' files to
+      " convert it to a manpage
+      if filereadable(expand('%'))
+        return man#get_nroff_page(a:split_type, expand('%:p'))
+      else
+        return s:error("Can't open file ".expand('%'))
+      endif
     else
       " simulating vim's error when not enough args provided
-      call s:error('E471: Argument required')
+      return s:error('E471: Argument required')
     endif
   elseif a:0 == 1
     let sect = ''
