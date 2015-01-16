@@ -33,3 +33,5 @@
 - improved syntax highlighting for 'LEGACY SYNOPSIS' manpage section
 - `g:man_width` enables user to specify fixed manpage width
 - `K` within man buffer also jumps to a manpage under cursor
+- remove the default `<leader>K` mapping and enable users do define their own
+  mapping to open a manpage for word under cursor
