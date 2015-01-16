@@ -31,3 +31,4 @@
 - bugfix: manTitle syntax highlighting for TCL man pages
 - syntax highlighting for more functions in manpages
 - improved syntax highlighting for 'LEGACY SYNOPSIS' manpage section
+- `g:man_width` enables user to specify fixed manpage width

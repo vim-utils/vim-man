@@ -253,7 +253,7 @@ endfunction
 function! s:load_manpage_text(page, section)
   setlocal modifiable
   silent keepj norm! 1GdG
-  let $MANWIDTH = winwidth(0)
+  let $MANWIDTH = exists('g:man_width') ? g:man_width : winwidth(0)
   silent exec 'r!/usr/bin/man '.s:get_cmd_arg(a:section, a:page).' | col -b'
   call s:remove_blank_lines_from_top_and_bottom()
   setlocal filetype=man
