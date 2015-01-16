@@ -37,3 +37,5 @@
   mapping to open a manpage for word under cursor
 - enable converting `nroff` files to manpages with `:Man`, `:Sman` and `:Vman`
   commands
+- add `<Plug>(Sman)` and `<Plug>(Vman)` mappings. `<Plug>(Sman)` is the same as
+  `<Plug>(Man)` and `<Plug(Vman)` does a vertical split.

@@ -34,11 +34,6 @@ function! man#get_page(split_type, ...)
     return
   endif
 
-  " To support:  nmap K :Man <cword>
-  if page ==# '<cword>'
-    let page = expand('<cword>')
-  endif
-
   if sect !=# '' && !s:manpage_exists(sect, page)
     let sect = ''
   endif
@@ -67,11 +62,13 @@ endfunction
 " }}}
 " man#get_page_from_cword {{{1
 
-function! man#get_page_from_cword(cnt)
+function! man#get_page_from_cword(split_type, cnt)
   if a:cnt == 0
-    " trying to determine manpage section from a word like this 'printf(3)'
     let old_isk = &iskeyword
-    setlocal iskeyword+=(,),:
+    if &filetype ==# 'man'
+      " when in a manpage try determining section from a word like this 'printf(3)'
+      setlocal iskeyword+=(,),:
+    endif
     let str = expand('<cword>')
     let &l:iskeyword = old_isk
     let page = matchstr(str, '\(\k\|:\)\+')
@@ -86,7 +83,7 @@ function! man#get_page_from_cword(cnt)
     let page = expand('<cword>')
     let &l:iskeyword = old_isk
   endif
-  call man#get_page('horizontal', sect, page)
+  call man#get_page(a:split_type, sect, page)
 endfunction
 
 " }}}
