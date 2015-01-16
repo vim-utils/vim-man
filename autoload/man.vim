@@ -18,18 +18,8 @@ endtry
 
 function! man#get_page(split_type, ...)
   if a:0 == 0
-    if &filetype ==# 'nroff'
-      " :Man command can be invoked without arguments in 'nroff' files to
-      " convert it to a manpage
-      if filereadable(expand('%'))
-        return man#get_nroff_page(a:split_type, expand('%:p'))
-      else
-        return s:error("Can't open file ".expand('%'))
-      endif
-    else
-      " simulating vim's error when not enough args provided
-      return s:error('E471: Argument required')
-    endif
+    call s:handle_nroff_file_or_error(a:split_type)
+    return
   elseif a:0 == 1
     let sect = ''
     let page = a:1
@@ -55,10 +45,25 @@ function! man#get_page(split_type, ...)
 endfunction
 
 " }}}
-" man#get_nroff_page {{{1
+" :Man command in nroff files {{{1
+
+" handles :Man command invocation with zero arguments
+function! s:handle_nroff_file_or_error(split_type)
+  " :Man command can be invoked in 'nroff' files to convert it to a manpage
+  if &filetype ==# 'nroff'
+    if filereadable(expand('%'))
+      return s:get_nroff_page(a:split_type, expand('%:p'))
+    else
+      return s:error("Can't open file ".expand('%'))
+    endif
+  else
+    " simulating vim's error when not enough args provided
+    return s:error('E471: Argument required')
+  endif
+endfunction
 
 " open a nroff file as a manpage
-function! man#get_nroff_page(split_type, nroff_file)
+function! s:get_nroff_page(split_type, nroff_file)
   call s:update_man_tag_variables()
   call s:get_new_or_existing_man_window(a:split_type)
   silent exec 'edit '.fnamemodify(a:nroff_file, ':t').'\ manpage\ (from\ nroff)'
