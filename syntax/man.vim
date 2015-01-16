@@ -13,7 +13,8 @@ syntax match manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
 syntax match manOptionDesc      '^\s*[+-][a-z0-9]\S*'
 syntax match manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
 syntax match manHeaderFile      '\s<\f\+\.h>\s'
-syntax match manURL `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
+syntax match manURL   `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
+syntax match manEmail '<[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>'
 " syntax match  manHistory         '^[a-z].*last change.*$'
 
 " below syntax elements valid for manpages 2 & 3 only
@@ -34,6 +35,7 @@ hi def link manSubHeading      Function
 hi def link manCFuncDefinition Function
 hi def link manHeaderFile      String
 hi def link manURL             Underlined
+hi def link manEmail           Underlined
 hi def link manCError          Identifier
 
 let b:current_syntax = 'man'
