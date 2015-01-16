@@ -36,6 +36,8 @@ if !hasmapto('<Plug>ManBS')
 endif
 nnoremap <buffer> <Plug>ManBS :%s/.\b//g<CR>:setlocal nomod<CR>''
 
+nnoremap <silent> <buffer> K           :call man#get_page_from_cword(v:count)<CR>
+
 " All tag mappings are defined for completeness. They all perform the same
 " action.
 nnoremap <silent> <buffer> <C-]>       :call man#get_page_from_cword(v:count)<CR>
