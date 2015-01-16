@@ -53,17 +53,20 @@ function! man#get_page_from_cword(cnt)
   if a:cnt == 0
     " trying to determine manpage section from a word like this 'printf(3)'
     let old_isk = &iskeyword
-    setlocal iskeyword+=(,)
+    setlocal iskeyword+=(,),:
     let str = expand('<cword>')
     let &l:iskeyword = old_isk
-    let page = substitute(str, '(*\(\k\+\).*', '\1', '')
-    let sect = substitute(str, '\(\k\+\)(\([^()]*\)).*', '\2', '')
-    if sect !~# '^[0-9 ]\+$' || sect == page
+    let page = matchstr(str, '\(\k\|:\)\+')
+    let sect = matchstr(str, '(\zs[^)]*\ze)')
+    if sect !~# '^[0-9nlpo][a-z]*$' || sect ==# page
       let sect = ''
     endif
   else
     let sect = a:cnt
+    let old_isk = &iskeyword
+    setlocal iskeyword+=:
     let page = expand('<cword>')
+    let &l:iskeyword = old_isk
   endif
   call man#get_page('horizontal', sect, page)
 endfunction
@@ -240,7 +243,7 @@ function! s:remove_blank_lines_from_top_and_bottom()
 endfunction
 
 function! s:set_manpage_buffer_name(page, section)
-  if a:section
+  if !empty(a:section)
     silent exec 'edit '.a:page.'('.a:section.')\ manpage'
   else
     silent exec 'edit '.a:page.'\ manpage'
