@@ -6,24 +6,22 @@ endif
 runtime! syntax/ctrlh.vim
 
 syntax case ignore
-syntax match manReference       '\(\f\|:\)\+(\([0-9nlpo][a-z]*\)\?)'
+syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W\|$\)'
 syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
-syntax match manSectionHeading  '^[a-z][a-z ,-]*[a-z]$'
-syntax match manSubHeading      '^\s\{3\}[a-z][a-z ,-]*[a-z]$'
-syntax match manOptionDesc      '^\s*[+-][a-z0-9]\S*'
-syntax match manLongOptionDesc  '^\s*--[a-z0-9-]\S*'
-syntax match manHeaderFile      '\s<\f\+\.h>\s'
-syntax match manURL   `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
-syntax match manEmail '<[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>'
-" syntax match  manHistory         '^[a-z].*last change.*$'
+syntax match manSectionHeading  '^[a-z][a-z0-9& ,.-]*[a-z]$'
+syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
+syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
+syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
+syntax match manHighlight       +`.\{-}''\?+
 
 " below syntax elements valid for manpages 2 & 3 only
 if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
   syntax include @cCode syntax/c.vim
   syntax match manCFuncDefinition  display '\<\h\w*\>\s*('me=e-1 contained
-  syntax match manCError           display '^\s\+\[E\u\+\]' contained
-  syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-12 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
-  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manReference,manSectionHeading,manSubHeading,manHeaderFile,manCError
+  syntax match manCError           display '^\s\+\[E\(\u\|\d\)\+\]' contained
+  syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
+  syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
+  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manSubHeading,manHeaderFile,manCError
 endif
 
 hi def link manTitle           Title
@@ -37,6 +35,8 @@ hi def link manHeaderFile      String
 hi def link manURL             Underlined
 hi def link manEmail           Underlined
 hi def link manCError          Identifier
+hi def link manSignal          Identifier
+hi def link manHighlight       Statement
 
 let b:current_syntax = 'man'
 
