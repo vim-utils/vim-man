@@ -10,6 +10,8 @@ command! -nargs=* -bar -complete=customlist,man#command_completion Man  call man
 command! -nargs=* -bar -complete=customlist,man#command_completion Sman call man#get_page('horizontal', <f-args>)
 command! -nargs=* -bar -complete=customlist,man#command_completion Vman call man#get_page('vertical',   <f-args>)
 
+command! -nargs=+ -bar Mangrep call man#grep(<f-args>)
+
 " map a key to open a manpage for word under cursor, example: map ,k <Plug>(Man)
 nnoremap <silent> <Plug>(Man)  :<C-U>call man#get_page_from_cword('horizontal', 0)<CR>
 nnoremap <silent> <Plug>(Sman) :<C-U>call man#get_page_from_cword('horizontal', 0)<CR>

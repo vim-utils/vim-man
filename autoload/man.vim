@@ -158,16 +158,7 @@ function! s:get_manpage_section(line, cursor_position)
   let leading_line = strpart(a:line, 0, a:cursor_position)
   let section_arg = matchstr(leading_line, '^\s*\S\+\s\+\zs\S\+\ze\s\+')
   if !empty(section_arg)
-    if section_arg =~# '^\d[xp]\?$'
-      " matches dirs: man1, man1x, man1p
-      return section_arg
-    elseif section_arg =~# '^[nlpo]$'
-      " matches dirs: mann, manl, manp, mano
-      return section_arg
-    elseif section_arg =~# '^\d\a\+$'
-      " take only first digit, sections 3pm, 3ssl, 3tiff, 3tcl are searched in man3
-      return matchstr(section_arg, '^\d')
-    endif
+    return s:extract_permitted_section_value(section_arg)
   endif
   " no section arg or extracted section cannot be used for man dir name globbing
   return ''
@@ -192,22 +183,6 @@ function! s:get_manpath()
   return s:manpath
 endfunction
 
-" creates a string containing shell globs suitable to finding matching manpages
-function! s:get_path_glob(manpath, section)
-  let section_part = empty(a:section) ? '*' : a:section
-  let man_globs = substitute(a:manpath.':', ':', '/*man'.section_part.'/,', 'g')
-  let cat_globs = substitute(a:manpath.':', ':', '/*cat'.section_part.'/,', 'g')
-  " remove one unecessary comma from the end
-  let cat_globs = substitute(cat_globs, ',$', '', '')
-  return man_globs.cat_globs
-endfunction
-
-" path glob expansion to get filenames
-function! s:expand_path_glob(path_glob, manpage_prefix)
-  let manpage_part = empty(a:manpage_prefix) ? '*' : a:manpage_prefix.'*'
-  return globpath(a:path_glob, manpage_part, 1, 1)
-endfunction
-
 " strips file names so they correspond manpage names
 function! s:strip_file_names(matching_files)
   if empty(a:matching_files)
@@ -218,8 +193,7 @@ function! s:strip_file_names(matching_files)
     for manpage_path in a:matching_files
       " since already looping also count list length
       let len += 1
-      " first strips the directory name from the match, then the extension
-      call add(matches, StripExtension(fnamemodify(manpage_path, ':t')))
+      call add(matches, s:strip_dirname_and_extension(manpage_path))
     endfor
     " remove duplicates from small lists (it takes noticeably longer
     " and is less relevant for large lists)
@@ -227,11 +201,83 @@ function! s:strip_file_names(matching_files)
   endif
 endfunction
 
-" Public function so it can be used for testing.
-" Check 'manpage_extension_stripping_test.vim' for example input and output
-" this regex produces.
-function! StripExtension(filename)
-  return substitute(a:filename, '\.\(\d\a*\|n\|ntcl\)\(\.\a*\|\.bz2\)\?$', '', '')
+" }}}
+" man#grep {{{1
+
+function! man#grep(...)
+  " argument handling and sanitization
+  if a:0 ==# 1
+    " just the pattern is provided
+    " defaulting section to 1
+    let section = '1'
+    let pattern = a:1
+  elseif a:0 ==# 2
+    " section + pattern provided
+    let section = s:extract_permitted_section_value(a:1)
+    let pattern = a:2
+    if section ==# ''
+      " don't run an expensive grep on *all* sections if a user made a typo
+      return s:error('Unknown man section '.a:1)
+    endif
+  else
+    return
+  endif
+
+  let manpath = s:get_manpath()
+  if manpath =~# '^\s*$'
+    return
+  endif
+  let path_glob = s:get_path_glob(manpath, section)
+  let matching_files = s:expand_path_glob(path_glob, '*')
+  " create new quickfix list
+  call setqflist([], ' ')
+  call s:grep_man_files(pattern, matching_files)
+endfunction
+
+function! s:grep_man_files(pattern, files)
+  for file in a:files
+    let output_manfile  = 'MANWIDTH='.s:manwidth().' man '.file.' | col -b |'
+    let trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
+    let grep            = 'grep -n -E '.a:pattern
+    let matches = systemlist(output_manfile . trim_whitespace . grep)
+    if v:shell_error ==# 0
+      " found matches
+      call s:add_matches_to_quickfixlist(a:pattern, file, matches)
+    endif
+  endfor
+endfunction
+
+" adds grep matches for a single manpage
+function! s:add_matches_to_quickfixlist(pattern, file_path, matches)
+  let man_name = s:strip_dirname_and_extension(a:file_path)
+  let section = matchstr(fnamemodify(a:file_path, ':h:t'), '^\(man\|cat\)\zs.*')
+  let buf_num = s:create_empty_buffer_for_manpage(man_name, section)
+  for result in a:matches
+    let line_num = matchstr(result, '^\d\+')
+    " trimmed line content
+    let line_text = matchstr(result, '^[^:]\+:\s*\zs.\{-}\ze\s*$')
+    call setqflist([{'bufnr': buf_num, 'lnum': line_num, 'text': line_text}], 'a')
+  endfor
+endfunction
+
+function! s:create_empty_buffer_for_manpage(name, section)
+  let buffer_num = bufnr(a:name.'('.a:section.')', 1)
+  call setbufvar(buffer_num, 'man_name', a:name)
+  call setbufvar(buffer_num, 'man_section', a:section)
+  exec 'au BufEnter <buffer='.buffer_num.'> call man#quickfix_get_page()'
+  return buffer_num
+endfunction
+
+" }}}
+" man#quickfix_get_page {{{1
+
+function! man#quickfix_get_page()
+  let manpage_name = get(b:, 'man_name')
+  let manpage_section = get(b:, 'man_section')
+  call s:update_man_tag_variables()
+  " TODO: switch to existing 'man' window or create a split
+  call s:set_manpage_buffer_name(manpage_name, manpage_section)
+  call s:load_manpage_text(manpage_name, manpage_section)
 endfunction
 
 " }}}
@@ -273,21 +319,36 @@ function! s:remove_blank_lines_from_top_and_bottom()
 endfunction
 
 function! s:set_manpage_buffer_name(page, section)
+  silent exec 'edit '.s:manpage_buffer_name(a:page, a:section)
+endfunction
+
+function! s:manpage_buffer_name(page, section)
   if !empty(a:section)
-    silent exec 'edit '.a:page.'('.a:section.')\ manpage'
+    return a:page.'('.a:section.')\ manpage'
   else
-    silent exec 'edit '.a:page.'\ manpage'
+    return a:page.'\ manpage'
   endif
 endfunction
 
 function! s:load_manpage_text(page, section)
   setlocal modifiable
   silent keepj norm! 1GdG
-  let $MANWIDTH = exists('g:man_width') ? g:man_width : winwidth(0)
+  let $MANWIDTH = s:manwidth()
   silent exec 'r!/usr/bin/man '.s:get_cmd_arg(a:section, a:page).' | col -b'
   call s:remove_blank_lines_from_top_and_bottom()
   setlocal filetype=man
   setlocal nomodifiable
+endfunction
+
+" Default manpage width is 80 characters. Change this with 'g:man_width',
+" example: 'let g:man_width = 120'.
+" If g:man_width is set to 0, the width of the current vim window is used.
+function! s:manwidth()
+  if exists('g:man_width')
+    return g:man_width ==# 0 ? winwidth(0) : g:man_width
+  else
+    return 80
+  end
 endfunction
 
 function! s:get_new_or_existing_man_window(split_type)
@@ -321,6 +382,59 @@ function! s:update_man_tag_variables()
   let s:man_tag_lin_{s:man_tag_depth} = line('.')
   let s:man_tag_col_{s:man_tag_depth} = col('.')
   let s:man_tag_depth += 1
+endfunction
+
+function! s:extract_permitted_section_value(section_arg)
+  if a:section_arg =~# '^*$'
+    " matches all dirs with a glob 'man*'
+    return a:section_arg
+  elseif a:section_arg =~# '^\d[xp]\?$'
+    " matches dirs: man1, man1x, man1p
+    return a:section_arg
+  elseif a:section_arg =~# '^[nlpo]$'
+    " matches dirs: mann, manl, manp, mano
+    return a:section_arg
+  elseif a:section_arg =~# '^\d\a\+$'
+    " take only first digit, sections 3pm, 3ssl, 3tiff, 3tcl are searched in man3
+    return matchstr(a:section_arg, '^\d')
+  else
+    return ''
+  endif
+endfunction
+
+" creates a string containing shell globs suitable to finding matching manpages
+function! s:get_path_glob(manpath, section)
+  let section_part = empty(a:section) ? '*' : a:section
+  let man_globs = substitute(a:manpath.':', ':', '/*man'.section_part.'/,', 'g')
+  let cat_globs = substitute(a:manpath.':', ':', '/*cat'.section_part.'/,', 'g')
+  " remove one unecessary comma from the end
+  let cat_globs = substitute(cat_globs, ',$', '', '')
+  return man_globs.cat_globs
+endfunction
+
+" path glob expansion to get filenames
+function! s:expand_path_glob(path_glob, manpage_prefix)
+  if empty(a:manpage_prefix)
+    let manpage_part = '*'
+  elseif a:manpage_prefix =~# '*$'
+    " asterisk is already present
+    let manpage_part = a:manpage_prefix
+  else
+    let manpage_part = a:manpage_prefix.'*'
+  endif
+  return globpath(a:path_glob, manpage_part, 1, 1)
+endfunction
+
+" first strips the directory name from the match, then the extension
+function! s:strip_dirname_and_extension(manpage_path)
+  return StripExtension(fnamemodify(a:manpage_path, ':t'))
+endfunction
+
+" Public function so it can be used for testing.
+" Check 'manpage_extension_stripping_test.vim' for example input and output
+" this regex produces.
+function! StripExtension(filename)
+  return substitute(a:filename, '\.\(\d\a*\|n\|ntcl\)\(\.\a*\|\.bz2\)\?$', '', '')
 endfunction
 
 " }}}
