@@ -26,8 +26,6 @@ function! man#get_page(split_type, ...)
   elseif a:0 >= 2
     let sect = a:1
     let page = a:2
-  else
-    return
   endif
 
   if sect !=# '' && !s:manpage_exists(sect, page)
