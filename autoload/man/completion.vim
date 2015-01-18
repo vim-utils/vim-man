@@ -6,7 +6,7 @@ function! man#completion#run(A, L, P)
     return []
   endif
   let section = s:get_manpage_section(a:L, a:P)
-  let path_glob = man#helpers#get_path_glob(manpath, section)
+  let path_glob = man#helpers#get_path_glob(manpath, section, '', ',')
   let matching_files = man#helpers#expand_path_glob(path_glob, a:A)
   return s:strip_file_names(matching_files)
 endfunction

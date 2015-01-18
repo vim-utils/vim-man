@@ -39,3 +39,5 @@
   commands
 - add `<Plug>(Sman)` and `<Plug>(Vman)` mappings. `<Plug>(Sman)` is the same as
   `<Plug>(Man)` and `<Plug(Vman)` does a vertical split.
+- implement `:Mangrep` command
+- implement async `:Mangrep` with neovim

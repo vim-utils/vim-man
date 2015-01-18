@@ -116,12 +116,13 @@ endfunction
 " man#helpers#get_path_glob {{{1
 
 " creates a string containing shell globs suitable to finding matching manpages
-function! man#helpers#get_path_glob(manpath, section)
+function! man#helpers#get_path_glob(manpath, section, file, separator)
   let section_part = empty(a:section) ? '*' : a:section
-  let man_globs = substitute(a:manpath.':', ':', '/*man'.section_part.'/,', 'g')
-  let cat_globs = substitute(a:manpath.':', ':', '/*cat'.section_part.'/,', 'g')
-  " remove one unecessary comma from the end
-  let cat_globs = substitute(cat_globs, ',$', '', '')
+  let file_part = empty(a:file) ? '' : a:file
+  let man_globs = substitute(a:manpath.':', ':', '/*man'.section_part.'/'.file_part.a:separator, 'g')
+  let cat_globs = substitute(a:manpath.':', ':', '/*cat'.section_part.'/'.file_part.a:separator, 'g')
+  " remove one unecessary path separator from the end
+  let cat_globs = substitute(cat_globs, a:separator.'$', '', '')
   return man_globs.cat_globs
 endfunction
 

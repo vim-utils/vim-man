@@ -51,14 +51,87 @@ function! man#grep#run(...)
   if manpath =~# '^\s*$'
     return
   endif
-  let path_glob = man#helpers#get_path_glob(manpath, section)
-  let matching_files = man#helpers#expand_path_glob(path_glob, '*')
   " create new quickfix list
   call setqflist([], ' ')
-  call s:grep_man_files(grep_case_insensitive, pattern, matching_files)
+  if has('nvim')
+    let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
+    call s:grep_nvim_strategy(grep_case_insensitive, pattern, path_glob)
+  else
+    let path_glob = man#helpers#get_path_glob(manpath, section, '', ',')
+    let matching_files = man#helpers#expand_path_glob(path_glob, '*')
+    call s:grep_basic_strategy(grep_case_insensitive, pattern, matching_files)
+  endif
 endfunction
 
-function! s:grep_man_files(insensitive, pattern, files)
+" }}}
+" neovim JobActivity autocmd {{{1
+
+if has('nvim')
+  augroup manGrep
+    au!
+    au JobActivity mangrep call man#grep#handle_async_output()
+  augroup END
+endif
+
+" }}}
+" s:grep_nvim_strategy {{{1
+
+let s:job_number = 0
+
+function! s:grep_nvim_strategy(insensitive, pattern, path_glob)
+  " stop currently running Mangrep if any
+  try
+    call jobstop(s:job_number)
+  catch
+  endtry
+
+  let $MANWIDTH = man#helpers#manwidth()
+  let insensitive_flag = a:insensitive ? '-i' : ''
+
+  " TODO: can this be simplified?
+  let do_glob = 'ls '.a:path_glob.' |'
+  " xargs is used to feed manpages one-by-one
+  let xargs = 'xargs -I{} -n1 sh -c "'
+  " inner variables execute within a shell started by xargs
+  let inner_output_manfile  = '/usr/bin/man {} 2>&1 | col -b |'
+  " if the first manpage line is blank, remove it
+  let inner_trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
+  let inner_grep            = 'grep '.insensitive_flag.' -n -E '.a:pattern.' |'
+  " prepending filename to each line of grep output
+  let inner_append_filename = "sed 's,^,{}:,'"
+  let end_quot = '"'
+
+  let command = do_glob.xargs.inner_output_manfile.inner_trim_whitespace.inner_grep.inner_append_filename.end_quot
+  let s:job_number = jobstart('mangrep', 'sh', ['-c', command])
+endfunction
+
+" }}}
+" man#grep#handle_async_output (neovim) {{{1
+
+function! man#grep#handle_async_output()
+  if v:job_data[1] ==# 'stdout'
+    for one_line in v:job_data[2]
+      " line format: 'manpage_file_name:line_number:line_text'
+      " example: '/usr/share/man/man1/echo.1:123: line match example'
+      let manpage_file_name = matchstr(one_line, '^[^:]\+')
+      let line_number = matchstr(one_line, '^[^:]\+:\zs\d\+')
+      let line_text = matchstr(one_line, '^[^:]\+:[^:]\+:\s*\zs.\{-}\ze\s*$')
+
+      " example input: '/usr/share/man/man1/echo.1'
+      " get manpage name: 'echo' and man section '1'
+      let man_name = man#helpers#strip_dirname_and_extension(manpage_file_name)
+      let section = matchstr(fnamemodify(manpage_file_name, ':h:t'), '^\(man\|cat\)\zs.*')
+
+      let buf_num = s:create_empty_buffer_for_manpage(man_name, section)
+      call setqflist([{'bufnr': buf_num, 'lnum': line_number, 'text': line_text}], 'a')
+    endfor
+  endif
+endfunction
+
+" }}}
+" s:grep_basic_strategy {{{1
+
+function! s:grep_basic_strategy(insensitive, pattern, files)
   let $MANWIDTH = man#helpers#manwidth()
   let insensitive_flag = a:insensitive ? '-i' : ''
   for file in a:files
@@ -68,13 +141,13 @@ function! s:grep_man_files(insensitive, pattern, files)
     let matches = systemlist(output_manfile . trim_whitespace . grep)
     if v:shell_error ==# 0
       " found matches
-      call s:add_matches_to_quickfixlist(a:pattern, file, matches)
+      call s:add_matches_to_quickfixlist(file, matches)
     endif
   endfor
 endfunction
 
 " adds grep matches for a single manpage
-function! s:add_matches_to_quickfixlist(pattern, file_path, matches)
+function! s:add_matches_to_quickfixlist(file_path, matches)
   let man_name = man#helpers#strip_dirname_and_extension(a:file_path)
   let section = matchstr(fnamemodify(a:file_path, ':h:t'), '^\(man\|cat\)\zs.*')
   let buf_num = s:create_empty_buffer_for_manpage(man_name, section)
@@ -85,6 +158,21 @@ function! s:add_matches_to_quickfixlist(pattern, file_path, matches)
     call setqflist([{'bufnr': buf_num, 'lnum': line_num, 'text': line_text}], 'a')
   endfor
 endfunction
+
+" }}}
+" man#quickfix_get_page {{{1
+
+function! man#grep#quickfix_get_page()
+  let manpage_name = get(b:, 'man_name')
+  let manpage_section = get(b:, 'man_section')
+  set nobuflisted
+  " TODO: switch to existing 'man' window or create a split
+  call man#helpers#set_manpage_buffer_name(manpage_name, manpage_section)
+  call man#helpers#load_manpage_text(manpage_name, manpage_section)
+endfunction
+
+" }}}
+" grep helpers {{{1
 
 function! s:create_empty_buffer_for_manpage(name, section)
   if bufnr(a:name.'('.a:section.')') >=# 0
@@ -98,18 +186,6 @@ function! s:create_empty_buffer_for_manpage(name, section)
   call setbufvar(buffer_num, 'man_section', a:section)
   exec 'au BufEnter <buffer='.buffer_num.'> call man#grep#quickfix_get_page()'
   return buffer_num
-endfunction
-
-" }}}
-" man#quickfix_get_page {{{1
-
-function! man#grep#quickfix_get_page()
-  let manpage_name = get(b:, 'man_name')
-  let manpage_section = get(b:, 'man_section')
-  set nobuflisted
-  " TODO: switch to existing 'man' window or create a split
-  call man#helpers#set_manpage_buffer_name(manpage_name, manpage_section)
-  call man#helpers#load_manpage_text(manpage_name, manpage_section)
 endfunction
 
 " }}}
