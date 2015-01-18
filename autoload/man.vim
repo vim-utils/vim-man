@@ -235,8 +235,9 @@ function! man#grep(...)
 endfunction
 
 function! s:grep_man_files(pattern, files)
+  let $MANWIDTH = s:manwidth()
   for file in a:files
-    let output_manfile  = 'MANWIDTH='.s:manwidth().' man '.file.' | col -b |'
+    let output_manfile  = '/usr/bin/man '.file.' | col -b |'
     let trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
     let grep            = 'grep -n -E '.a:pattern
     let matches = systemlist(output_manfile . trim_whitespace . grep)
