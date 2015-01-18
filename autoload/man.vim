@@ -263,6 +263,8 @@ endfunction
 
 function! s:create_empty_buffer_for_manpage(name, section)
   let buffer_num = bufnr(a:name.'('.a:section.')', 1)
+  " saving manpage name and section as buffer variable, so they're
+  " easy to get later when in the buffer
   call setbufvar(buffer_num, 'man_name', a:name)
   call setbufvar(buffer_num, 'man_section', a:section)
   exec 'au BufEnter <buffer='.buffer_num.'> call man#quickfix_get_page()'
