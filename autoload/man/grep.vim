@@ -106,6 +106,7 @@ endfunction
 function! man#grep#quickfix_get_page()
   let manpage_name = get(b:, 'man_name')
   let manpage_section = get(b:, 'man_section')
+  set nobuflisted
   " TODO: switch to existing 'man' window or create a split
   call man#helpers#set_manpage_buffer_name(manpage_name, manpage_section)
   call man#helpers#load_manpage_text(manpage_name, manpage_section)
