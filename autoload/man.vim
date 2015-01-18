@@ -291,6 +291,10 @@ function! s:add_matches_to_quickfixlist(pattern, file_path, matches)
 endfunction
 
 function! s:create_empty_buffer_for_manpage(name, section)
+  if bufnr(a:name.'('.a:section.')') >=# 0
+    " buffer already exists
+    return bufnr(a:name.'('.a:section.')')
+  endif
   let buffer_num = bufnr(a:name.'('.a:section.')', 1)
   " saving manpage name and section as buffer variable, so they're
   " easy to get later when in the buffer
