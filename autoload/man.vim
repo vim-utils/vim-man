@@ -208,20 +208,48 @@ function! man#grep(...)
   " argument handling and sanitization
   if a:0 ==# 1
     " just the pattern is provided
+    let grep_case_insensitive = 0
     " defaulting section to 1
     let section = '1'
     let pattern = a:1
+
   elseif a:0 ==# 2
-    " section + pattern provided
-    let section = s:extract_permitted_section_value(a:1)
-    let pattern = a:2
+    " section + pattern OR grep `-i` flag + pattern
+    if a:1 ==# '-i'
+      " grep `-i` flag + pattern
+      let grep_case_insensitive = 1
+      " defaulting section to 1
+      let section = '1'
+      let pattern = a:1
+    else
+      " section + pattern
+      let grep_case_insensitive = 0
+      let section = s:extract_permitted_section_value(a:1)
+      if section ==# ''
+        " don't run an expensive grep on *all* sections if a user made a typo
+        return s:error('Unknown man section '.a:1)
+      endif
+      let pattern = a:2
+    endif
+
+  elseif a:0 ==# 3
+    " grep `-i` flag + section + pattern
+    if a:1 ==# '-i'
+      let grep_case_insensitive = 1
+    else
+      return s:error('Unknown Mangrep argument '.a:1)
+    endif
+    let section = s:extract_permitted_section_value(a:2)
     if section ==# ''
       " don't run an expensive grep on *all* sections if a user made a typo
-      return s:error('Unknown man section '.a:1)
+      return s:error('Unknown man section '.a:2)
     endif
-  else
-    return
+    let pattern = a:3
+
+  elseif a:0 >=# 4
+    return s:error('Too many arguments')
   endif
+  " argument handling end
 
   let manpath = s:get_manpath()
   if manpath =~# '^\s*$'
@@ -231,15 +259,16 @@ function! man#grep(...)
   let matching_files = s:expand_path_glob(path_glob, '*')
   " create new quickfix list
   call setqflist([], ' ')
-  call s:grep_man_files(pattern, matching_files)
+  call s:grep_man_files(grep_case_insensitive, pattern, matching_files)
 endfunction
 
-function! s:grep_man_files(pattern, files)
+function! s:grep_man_files(insensitive, pattern, files)
   let $MANWIDTH = s:manwidth()
+  let insensitive_flag = a:insensitive ? '-i' : ''
   for file in a:files
     let output_manfile  = '/usr/bin/man '.file.' | col -b |'
     let trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
-    let grep            = 'grep -n -E '.a:pattern
+    let grep = 'grep '.insensitive_flag.' -n -E '.a:pattern
     let matches = systemlist(output_manfile . trim_whitespace . grep)
     if v:shell_error ==# 0
       " found matches
