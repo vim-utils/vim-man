@@ -273,6 +273,7 @@ endfunction
 " man#quickfix_get_page {{{1
 
 function! man#quickfix_get_page()
+  exec 'au! BufEnter <buffer='.bufnr('%').'>'
   let manpage_name = get(b:, 'man_name')
   let manpage_section = get(b:, 'man_section')
   call s:update_man_tag_variables()
