@@ -4,7 +4,7 @@
 " Output is 'OK' if tests pass, otherwise failing test cases are displayed.
 " Shell exit code is set to 0 if tests pass, 1 otherwise.
 
-source autoload/man.vim
+source autoload/man/helpers.vim
 
 " test cases are split into sections:
 "  1. simplest cases
@@ -131,7 +131,7 @@ endfunction
 function! s:run_test_cases()
   let failing_cases = []
   for case in s:test_cases
-    let output = StripExtension(case.in)
+    let output = man#helpers#strip_extension(case.in)
     if output !=# case.out
       call add(failing_cases, {'in': case.in, 'out': case.out, 'got': output})
     endif

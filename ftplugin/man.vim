@@ -45,10 +45,10 @@ nnoremap <silent> <buffer> <C-W>g}     :call man#get_page_from_cword('horizontal
 
 nnoremap <silent> <buffer> <C-T> :call man#pop_page()<CR>
 
-nnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'n', v:count1)<CR>
-nnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'n', v:count1)<CR>
-xnoremap <silent> <buffer> [[ :<C-U>call man#section_movement('b', 'v', v:count1)<CR>
-xnoremap <silent> <buffer> ]] :<C-U>call man#section_movement('' , 'v', v:count1)<CR>
+nnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'n', v:count1)<CR>
+nnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'n', v:count1)<CR>
+xnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'v', v:count1)<CR>
+xnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'v', v:count1)<CR>
 
 " }}}
 

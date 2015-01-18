@@ -6,11 +6,11 @@ let g:loaded_man = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=* -bar -complete=customlist,man#command_completion Man  call man#get_page('horizontal', <f-args>)
-command! -nargs=* -bar -complete=customlist,man#command_completion Sman call man#get_page('horizontal', <f-args>)
-command! -nargs=* -bar -complete=customlist,man#command_completion Vman call man#get_page('vertical',   <f-args>)
+command! -nargs=* -bar -complete=customlist,man#completion#run Man  call man#get_page('horizontal', <f-args>)
+command! -nargs=* -bar -complete=customlist,man#completion#run Sman call man#get_page('horizontal', <f-args>)
+command! -nargs=* -bar -complete=customlist,man#completion#run Vman call man#get_page('vertical',   <f-args>)
 
-command! -nargs=+ -bar Mangrep call man#grep(<f-args>)
+command! -nargs=+ -bar Mangrep call man#grep#run(<f-args>)
 
 " map a key to open a manpage for word under cursor, example: map ,k <Plug>(Man)
 nnoremap <silent> <Plug>(Man)  :<C-U>call man#get_page_from_cword('horizontal', 0)<CR>
