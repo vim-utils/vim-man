@@ -278,7 +278,6 @@ function! man#quickfix_get_page()
   exec 'au! BufEnter <buffer='.bufnr('%').'>'
   let manpage_name = get(b:, 'man_name')
   let manpage_section = get(b:, 'man_section')
-  call s:update_man_tag_variables()
   " TODO: switch to existing 'man' window or create a split
   call s:set_manpage_buffer_name(manpage_name, manpage_section)
   call s:load_manpage_text(manpage_name, manpage_section)
