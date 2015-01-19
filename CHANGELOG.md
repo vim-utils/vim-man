@@ -41,3 +41,4 @@
   `<Plug>(Man)` and `<Plug(Vman)` does a vertical split.
 - implement `:Mangrep` command
 - implement async `:Mangrep` with neovim
+- `:Mangrep` now respects vim's bang convention

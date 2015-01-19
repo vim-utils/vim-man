@@ -1,6 +1,6 @@
 " man#grep#run {{{1
 
-function! man#grep#run(...)
+function! man#grep#run(bang, ...)
   " argument handling and sanitization
   if a:0 ==# 1
     " just the pattern is provided
@@ -55,11 +55,11 @@ function! man#grep#run(...)
   call setqflist([], ' ')
   if has('nvim')
     let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
-    call s:grep_nvim_strategy(grep_case_insensitive, pattern, path_glob)
+    call s:grep_nvim_strategy(a:bang, grep_case_insensitive, pattern, path_glob)
   else
     let path_glob = man#helpers#get_path_glob(manpath, section, '', ',')
     let matching_files = man#helpers#expand_path_glob(path_glob, '*')
-    call s:grep_basic_strategy(grep_case_insensitive, pattern, matching_files)
+    call s:grep_basic_strategy(a:bang, grep_case_insensitive, pattern, matching_files)
   endif
 endfunction
 
@@ -76,14 +76,22 @@ endif
 " }}}
 " s:grep_nvim_strategy {{{1
 
+" state of the current job
 let s:job_number = 0
+let s:grep_not_bang = 0
+let s:grep_opened_first_result = 0
 
-function! s:grep_nvim_strategy(insensitive, pattern, path_glob)
+function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
   " stop currently running Mangrep if any
   try
     call jobstop(s:job_number)
+    let s:grep_opened_first_result = 0
   catch
   endtry
+
+  " By convention, grep "jumps" to the first result unless the command is
+  " invoked with bang (!)
+  let s:grep_not_bang = a:bang > 0 ? 0 : 1
 
   let $MANWIDTH = man#helpers#manwidth()
   let insensitive_flag = a:insensitive ? '-i' : ''
@@ -124,6 +132,16 @@ function! man#grep#handle_async_output()
 
       let buf_num = s:create_empty_buffer_for_manpage(man_name, section)
       call setqflist([{'bufnr': buf_num, 'lnum': line_number, 'text': line_text}], 'a')
+
+      " jump to first result if command not invoked with bang
+      if s:grep_not_bang > 0 && s:grep_opened_first_result ==# 0
+        let s:grep_opened_first_result = 1
+        cc 1
+        " TODO: for some reason cc 1 does not trigger autocmd for loading man
+        " page into current buffer, so we're doing it manually
+        call man#grep#quickfix_get_page()
+        exec 'norm! '.line_number.'G'
+      endif
     endfor
   endif
 endfunction
@@ -131,7 +149,7 @@ endfunction
 " }}}
 " s:grep_basic_strategy {{{1
 
-function! s:grep_basic_strategy(insensitive, pattern, files)
+function! s:grep_basic_strategy(bang, insensitive, pattern, files)
   let $MANWIDTH = man#helpers#manwidth()
   let insensitive_flag = a:insensitive ? '-i' : ''
   for file in a:files
@@ -144,6 +162,10 @@ function! s:grep_basic_strategy(insensitive, pattern, files)
       call s:add_matches_to_quickfixlist(file, matches)
     endif
   endfor
+  " by convention jumps to the first result unless mangrep is invoked with bang (!)
+  if a:bang ==# 0
+    cc 1
+  endif
 endfunction
 
 " adds grep matches for a single manpage
