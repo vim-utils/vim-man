@@ -101,7 +101,7 @@ function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
   " xargs is used to feed manpages one-by-one
   let xargs = 'xargs -I{} -n1 sh -c "'
   " inner variables execute within a shell started by xargs
-  let inner_output_manfile  = '/usr/bin/man {} 2>&1 | col -b |'
+  let inner_output_manfile  = '/usr/bin/man {} 2>/dev/null | col -b |'
   " if the first manpage line is blank, remove it
   let inner_trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
   let inner_grep            = 'grep '.insensitive_flag.' -n -E '.a:pattern.' |'

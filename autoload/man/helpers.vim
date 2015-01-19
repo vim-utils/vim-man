@@ -61,7 +61,7 @@ function! man#helpers#load_manpage_text(page, section)
   setlocal modifiable
   silent keepj norm! 1GdG
   let $MANWIDTH = man#helpers#manwidth()
-  silent exec 'r!/usr/bin/man '.man#helpers#get_cmd_arg(a:section, a:page).' | col -b'
+  silent exec 'r!/usr/bin/man '.man#helpers#get_cmd_arg(a:section, a:page). ' 2>/dev/null | col -b'
   call s:remove_blank_lines_from_top_and_bottom()
   setlocal filetype=man
   setlocal nomodifiable
