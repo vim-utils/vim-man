@@ -183,3 +183,4 @@ function! man#helpers#manpath()
 endfunction
 
 " }}}
+" vim:set ft=vim et sw=2:

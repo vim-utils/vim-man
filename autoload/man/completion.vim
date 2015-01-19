@@ -42,3 +42,4 @@ function! s:strip_file_names(matching_files)
 endfunction
 
 " }}}
+" vim:set ft=vim et sw=2:

@@ -224,3 +224,4 @@ function! s:create_empty_buffer_for_manpage(name, section)
 endfunction
 
 " }}}
+" vim:set ft=vim et sw=2:

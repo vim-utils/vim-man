@@ -21,3 +21,4 @@ function! man#section#move(direction, mode, count)
 endfunction
 
 " }}}
+" vim:set ft=vim et sw=2:
