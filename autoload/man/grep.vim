@@ -98,13 +98,21 @@ function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
 
   " TODO: can this be simplified?
   let do_glob = 'ls '.a:path_glob.' |'
+
+  " NOTE: had a bug here: if the file is too long, xargs (on OS X) won't
+  " perform good interpolation with '{}' strings. The last {}
+  " occasionally didn't get replaced and there remained a literal '{}'
+
   " xargs is used to feed manpages one-by-one
   let xargs = 'xargs -I{} -n1 sh -c "'
+
   " inner variables execute within a shell started by xargs
-  let inner_output_manfile  = '/usr/bin/man {} 2>/dev/null | col -b |'
-  " if the first manpage line is blank, remove it
-  let inner_trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
-  let inner_grep            = 'grep '.insensitive_flag.' -n -E '.a:pattern.' |'
+  let inner_output_manfile  = '/usr/bin/man {} 2>/dev/null|col -b|'
+
+  " if the first manpage line is blank, remove it (stupid semicolons are required)
+  let inner_trim_whitespace = "sed '1 {;/^\s*$/d;}'|"
+  let inner_grep            = 'grep '.insensitive_flag.' -nE '.a:pattern.'|'
+
   " prepending filename to each line of grep output, followed by a !
   let inner_append_filename = "sed 's,^,{}!,'"
   let end_quot = '"'
@@ -155,7 +163,7 @@ function! s:grep_basic_strategy(bang, insensitive, pattern, files)
   let insensitive_flag = a:insensitive ? '-i' : ''
   for file in a:files
     let output_manfile  = '/usr/bin/man '.file.' | col -b |'
-    let trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
+    let trim_whitespace = "sed '1 {; /^\s*$/d; }' |"
     let grep = 'grep '.insensitive_flag.' -n -E '.a:pattern
     let matches = systemlist(output_manfile . trim_whitespace . grep)
     if v:shell_error ==# 0
