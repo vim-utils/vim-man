@@ -105,8 +105,8 @@ function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
   " if the first manpage line is blank, remove it
   let inner_trim_whitespace = "sed '1 {\n /^[:space:]*$/d \n}' |"
   let inner_grep            = 'grep '.insensitive_flag.' -n -E '.a:pattern.' |'
-  " prepending filename to each line of grep output
-  let inner_append_filename = "sed 's,^,{}:,'"
+  " prepending filename to each line of grep output, followed by a !
+  let inner_append_filename = "sed 's,^,{}!,'"
   let end_quot = '"'
 
   let command = do_glob.xargs.inner_output_manfile.inner_trim_whitespace.inner_grep.inner_append_filename.end_quot
@@ -119,11 +119,12 @@ endfunction
 function! man#grep#handle_async_output()
   if v:job_data[1] ==# 'stdout'
     for one_line in v:job_data[2]
-      " line format: 'manpage_file_name:line_number:line_text'
-      " example: '/usr/share/man/man1/echo.1:123: line match example'
-      let manpage_file_name = matchstr(one_line, '^[^:]\+')
-      let line_number = matchstr(one_line, '^[^:]\+:\zs\d\+')
-      let line_text = matchstr(one_line, '^[^:]\+:[^:]\+:\s*\zs.\{-}\ze\s*$')
+      " line format: 'manpage_file_name!line_number:line_text'
+      " example: '/usr/share/man/man1/echo.1!123: line match example'
+      " ! (exclamation mark) is used as a delimiter between a filename and " line num
+      let manpage_file_name = matchstr(one_line, '^[^!]\+')
+      let line_number = matchstr(one_line, '^[^!]\+!\zs\d\+')
+      let line_text = matchstr(one_line, '^[^!]\+![^:]\+:\s*\zs.\{-}\ze\s*$')
 
       " example input: '/usr/share/man/man1/echo.1'
       " get manpage name: 'echo' and man section '1'
