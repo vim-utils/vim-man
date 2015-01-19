@@ -82,6 +82,8 @@ let s:grep_not_bang = 0
 let s:grep_opened_first_result = 0
 
 function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
+  echom 'Mangrep command started in background'
+
   " stop currently running Mangrep if any
   try
     call jobstop(s:job_number)
@@ -152,6 +154,8 @@ function! man#grep#handle_async_output()
         exec 'norm! '.line_number.'G'
       endif
     endfor
+  elseif v:job_data[1] ==# 'exit'
+    echom 'Mangrep command done'
   endif
 endfunction
 
