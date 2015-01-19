@@ -139,7 +139,7 @@ function! man#helpers#expand_path_glob(path_glob, manpage_prefix)
   else
     let manpage_part = a:manpage_prefix.'*'
   endif
-  return globpath(a:path_glob, manpage_part, 1, 1)
+  return split(globpath(a:path_glob, manpage_part, 1), '\n')
 endfunction
 
 " }}}
