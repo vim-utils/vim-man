@@ -53,52 +53,23 @@ function! man#grep#run(bang, ...)
   endif
   " create new quickfix list
   call setqflist([], ' ')
+
   if has('nvim')
+    " strategy for running :Mangrep with neovim's async job
     let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
     call man#grep#nvim#run(a:bang, grep_case_insensitive, pattern, path_glob)
   elseif exists('g:loaded_dispatch')
+
+    " strategy for running :Mangrep with vim-dispatch async job
     let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
     call man#grep#dispatch#run(a:bang, grep_case_insensitive, pattern, path_glob)
   else
+
+    " Run :Mangrep command in plain old vim. It blocks until the job is done.
     let path_glob = man#helpers#get_path_glob(manpath, section, '', ',')
     let matching_files = man#helpers#expand_path_glob(path_glob, '*')
-    call s:grep_basic_strategy(a:bang, grep_case_insensitive, pattern, matching_files)
+    call man#grep#vanilla#run(a:bang, grep_case_insensitive, pattern, matching_files)
   endif
-endfunction
-
-" }}}
-" s:grep_basic_strategy {{{1
-
-function! s:grep_basic_strategy(bang, insensitive, pattern, files)
-  let $MANWIDTH = man#helpers#manwidth()
-  let insensitive_flag = a:insensitive ? '-i' : ''
-  for file in a:files
-    let output_manfile  = '/usr/bin/man '.file.' | col -b |'
-    let trim_whitespace = "sed '1 {; /^\s*$/d; }' |"
-    let grep = 'grep '.insensitive_flag.' -n -E '.a:pattern
-    let matches = systemlist(output_manfile . trim_whitespace . grep)
-    if v:shell_error ==# 0
-      " found matches
-      call s:add_matches_to_quickfixlist(file, matches)
-    endif
-  endfor
-  " by convention jumps to the first result unless mangrep is invoked with bang (!)
-  if a:bang ==# 0
-    cc 1
-  endif
-endfunction
-
-" adds grep matches for a single manpage
-function! s:add_matches_to_quickfixlist(file_path, matches)
-  let man_name = man#helpers#strip_dirname_and_extension(a:file_path)
-  let section = matchstr(fnamemodify(a:file_path, ':h:t'), '^\(man\|cat\)\zs.*')
-  let buf_num = s:create_empty_buffer_for_manpage(man_name, section)
-  for result in a:matches
-    let line_num = matchstr(result, '^\d\+')
-    " trimmed line content
-    let line_text = matchstr(result, '^[^:]\+:\s*\zs.\{-}\ze\s*$')
-    call setqflist([{'bufnr': buf_num, 'lnum': line_num, 'text': line_text}], 'a')
-  endfor
 endfunction
 
 " }}}

@@ -1,3 +1,5 @@
+" strategy to utilize vim-dispatch's plugin async jobs for :Mangrep command
+"
 " man#grep#dispatch {{{1
 
 function! man#grep#dispatch#run(bang, insensitive, pattern, path_glob)
