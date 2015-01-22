@@ -3,11 +3,10 @@
 " man#grep#dispatch {{{1
 
 function! man#grep#dispatch#run(bang, insensitive, pattern, path_glob)
-  let bang = a:bang ? '!' : ''
   let insensitive_flag = a:insensitive ? '-i' : ''
   let command = man#grep#command(a:path_glob, insensitive_flag, a:pattern)
   call s:compiler(command)
-  exec(':Make'.bang)
+  Make
 endfunction
 
 " }}}
