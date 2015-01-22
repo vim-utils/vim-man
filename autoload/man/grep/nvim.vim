@@ -45,6 +45,12 @@ endfunction
 " man#grep#nvim#handle_async_output {{{1
 
 function! man#grep#nvim#handle_async_output()
+  " we're not interested in the output of some lagging Mangrep process that
+  " should've already been dead
+  if s:not_currently_registered_job(v:job_data[0])
+    return
+  end
+
   if v:job_data[1] ==# 'stdout'
     for one_line in v:job_data[2]
       " line format: 'manpage_file_name!line_number:line_text'
@@ -75,6 +81,10 @@ function! man#grep#nvim#handle_async_output()
   elseif v:job_data[1] ==# 'exit'
     echom 'Mangrep command done'
   endif
+endfunction
+
+function! s:not_currently_registered_job(job_num)
+  return a:job_num !=# s:job_number
 endfunction
 
 " }}}
