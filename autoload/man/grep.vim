@@ -56,6 +56,9 @@ function! man#grep#run(bang, ...)
   if has('nvim')
     let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
     call s:grep_nvim_strategy(a:bang, grep_case_insensitive, pattern, path_glob)
+  elseif exists('g:loaded_dispatch')
+    let path_glob = man#helpers#get_path_glob(manpath, section, '*', ' ')
+    call man#grep#dispatch#run(a:bang, grep_case_insensitive, pattern, path_glob)
   else
     let path_glob = man#helpers#get_path_glob(manpath, section, '', ',')
     let matching_files = man#helpers#expand_path_glob(path_glob, '*')
@@ -98,28 +101,7 @@ function! s:grep_nvim_strategy(bang, insensitive, pattern, path_glob)
   let $MANWIDTH = man#helpers#manwidth()
   let insensitive_flag = a:insensitive ? '-i' : ''
 
-  " TODO: can this be simplified?
-  let do_glob = 'ls '.a:path_glob.' |'
-
-  " NOTE: had a bug here: if the file is too long, xargs (on OS X) won't
-  " perform good interpolation with '{}' strings. The last {}
-  " occasionally didn't get replaced and there remained a literal '{}'
-
-  " xargs is used to feed manpages one-by-one
-  let xargs = 'xargs -I{} -n1 sh -c "'
-
-  " inner variables execute within a shell started by xargs
-  let inner_output_manfile  = '/usr/bin/man {} 2>/dev/null|col -b|'
-
-  " if the first manpage line is blank, remove it (stupid semicolons are required)
-  let inner_trim_whitespace = "sed '1 {;/^\s*$/d;}'|"
-  let inner_grep            = 'grep '.insensitive_flag.' -nE '.a:pattern.'|'
-
-  " prepending filename to each line of grep output, followed by a !
-  let inner_append_filename = "sed 's,^,{}!,'"
-  let end_quot = '"'
-
-  let command = do_glob.xargs.inner_output_manfile.inner_trim_whitespace.inner_grep.inner_append_filename.end_quot
+  let command = man#grep#command(a:path_glob, insensitive_flag, a:pattern)
   let s:job_number = jobstart('mangrep', 'sh', ['-c', command])
 endfunction
 
@@ -221,6 +203,34 @@ function! s:create_empty_buffer_for_manpage(name, section)
   call setbufvar(buffer_num, 'man_section', a:section)
   exec 'au BufEnter <buffer='.buffer_num.'> call man#grep#quickfix_get_page()'
   return buffer_num
+endfunction
+
+" }}}
+" man#grep#command {{{1
+
+" TODO: can this whole command be simplified?
+function! man#grep#command(path_glob, insensitive_flag, pattern)
+  let do_glob = 'ls '.a:path_glob.' 2>/dev/null |'
+
+  " NOTE: had a bug here: if the file is too long, xargs (on OS X) won't
+  " perform good interpolation with '{}' strings. The last {}
+  " occasionally didn't get replaced and there remained a literal '{}'
+
+  " xargs is used to feed manpages one-by-one
+  let xargs = 'xargs -I{} -n1 sh -c "'
+
+  " inner variables execute within a shell started by xargs
+  let inner_output_manfile  = '/usr/bin/man {} 2>/dev/null|col -b|'
+
+  " if the first manpage line is blank, remove it (stupid semicolons are required)
+  let inner_trim_whitespace = "sed '1 {;/^\s*$/d;}'|"
+  let inner_grep            = 'grep '.a:insensitive_flag.' -nE '.a:pattern.'|'
+
+  " prepending filename to each line of grep output, followed by a !
+  let inner_append_filename = "sed 's,^,{}!,'"
+  let end_quot = '"'
+
+  return do_glob.xargs.inner_output_manfile.inner_trim_whitespace.inner_grep.inner_append_filename.end_quot
 endfunction
 
 " }}}
