@@ -22,7 +22,7 @@ function! s:set_compiler(command)
   let s:makeprg = &makeprg
   let s:efm = &errorformat
   let &makeprg = a:command
-  let &errorformat = '%f!%l:%m'
+  let &errorformat = '%*[^!]/%f!%l:%m'
   let &cpo = cpo_save
 endfunction
 
