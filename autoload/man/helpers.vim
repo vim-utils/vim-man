@@ -88,14 +88,13 @@ endfunction
 " }}}
 " man#helpers#manwidth {{{1
 
-" Default manpage width is 80 characters. Change this with 'g:man_width',
-" example: 'let g:man_width = 120'.
-" If g:man_width is set to 0, the width of the current vim window is used.
+" Default manpage width is the width of the screen. Change this with
+" 'g:man_width'. Example: 'let g:man_width = 120'.
 function! man#helpers#manwidth()
   if exists('g:man_width')
-    return g:man_width ==# 0 ? winwidth(0) : g:man_width
+    return g:man_width
   else
-    return 80
+    return winwidth(0)
   end
 endfunction
 
