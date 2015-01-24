@@ -9,6 +9,7 @@ function! man#grep#dispatch#run(bang, insensitive, pattern, path_glob)
   call s:set_compiler(command)
   Make!
   call s:restore_compiler()
+  let s:enable_mangrep_buffer_creation = 1
 endfunction
 
 " }}}
@@ -40,19 +41,24 @@ endfunction
 " }}}
 " manGrepDispatch autocommand {{{1
 
-" sets up buffers to open manpages when quickfixlist is opened with :Copen
-
 augroup manGrepDispatch
   au!
+  " sets up buffers to open manpages when quickfixlist is opened with :Copen
   au QuickFixCmdPost cgetfile call s:create_buffers_for_quicklist_entries()
+
+  " disable quickfix buffer manipulation when another vim-dispatch command is run
+  au QuickFixCmdPre dispatch-make let s:enable_mangrep_buffer_creation = 0
 augroup END
 
 function! s:create_buffers_for_quicklist_entries()
+  if !s:enable_mangrep_buffer_creation
+    return
+  endif
   for entry in getqflist()
     let buffer_num = entry['bufnr']
     let section = entry['type']
-    if !empty(getbufvar(buffer_num, 'man_name'))
-      " early exit, buffer is already set up
+    if buffer_num ==# 0 || !empty(getbufvar(buffer_num, 'man_name'))
+      " early exit, buffer_num is wrong or buffer already set
       continue
     else
       let name = man#helpers#strip_extension(bufname(buffer_num))
