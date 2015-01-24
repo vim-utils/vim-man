@@ -88,11 +88,12 @@ endfunction
 " man#grep#create_empty_buffer {{{1
 
 function! man#grep#create_empty_buffer(name, section)
-  if bufnr(a:name.'('.a:section.')') >=# 0
+  let buffer_name = a:name.'('.a:section.')'
+  if bufnr(buffer_name) >=# 0
     " buffer already exists
-    return bufnr(a:name.'('.a:section.')')
+    return bufnr(buffer_name)
   endif
-  let buffer_num = bufnr(a:name.'('.a:section.')', 1)
+  let buffer_num = bufnr(buffer_name, 1)
   call man#grep#setup_manpage_buffer(buffer_num, a:name, a:section)
   return buffer_num
 endfunction
