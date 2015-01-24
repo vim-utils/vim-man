@@ -122,23 +122,18 @@ endfunction
 
 " TODO: can this whole command be simplified?
 function! man#grep#command(path_glob, insensitive_flag, pattern)
-  let do_glob = 'ls '.a:path_glob.' 2>/dev/null |'
-
+  let command = 'ls '.a:path_glob.' 2>/dev/null |'
   " xargs is used to feed manpages one-by-one
-  let xargs = 'xargs -I{} -n1 sh -c "manpage={};'
-
+  let command .= 'xargs -I{} -n1 sh -c "manpage={};'
   " inner variables execute within a shell started by xargs
-  let inner_output_manfile  = '/usr/bin/man \$manpage 2>/dev/null|col -b|'
-
+  let command .= '/usr/bin/man \$manpage 2>/dev/null|col -b|'
   " if the first manpage line is blank, remove it (stupid semicolons are required)
-  let inner_trim_whitespace = "sed '1 {;/^\s*$/d;}'|"
-  let inner_grep            = 'grep '.a:insensitive_flag.' -nE '.a:pattern.'|'
-
+  let command .= "sed '1 {;/^\s*$/d;}'|"
+  let command .= 'grep '.a:insensitive_flag.' -nE '.a:pattern.'|'
   " prepending filename to each line of grep output, followed by a !
-  let inner_append_filename = 'sed "s,^,\$manpage!,"'
-  let end_quot = '"'
-
-  return do_glob.xargs.inner_output_manfile.inner_trim_whitespace.inner_grep.inner_append_filename.end_quot
+  let command .= 'sed "s,^,\$manpage!,"'
+  let command .= '"'
+  return command
 endfunction
 
 " }}}
