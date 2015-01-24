@@ -43,3 +43,4 @@
 - implement async `:Mangrep` with neovim
 - `:Mangrep` now respects vim's bang convention
 - add a vim-dispatch strategy for `:Mangrep`
+- expand the README and add docs

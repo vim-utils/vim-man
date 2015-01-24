@@ -1,0 +1,137 @@
+*man.txt*	View man pages in vim. Grep for the man pages.
+
+Maintainer: Bruno Sutic <https://www.github.com/bruno->
+
+INTRODUCTION					*man* *vim-man*
+
+This plugin enables viewing and navigating manual pages in vim.
+|:Mangrep| command adds the possibility of grepping all the manpages.
+
+COMMANDS					*man-commands*
+
+						*man-:Man*
+:Man [args]		Open man page in a horizontal split. The command has
+			support for man page completion.
+			Examples:
+				:Man printf
+				:Man 3 sprintf
+
+			When editing 'nroff' files, this command can be invoked
+			without arguments to open current file as a man page.
+
+						*man-:Sman*
+:Sman [args]		The same as |:Man|.
+
+						*man-:Vman*
+:Vman [args]		Like |:Man|, but open man page in a vertical split.
+
+						*man-:Mangrep*
+:Mangrep[!] [args]	Grep the content of manual pages. This feature is
+			still in "beta". Results should be accurate, but you
+			might experience hiccups when opening results from the
+			quickfix list. Also please see |:Mangrep-strategy|.
+			Example:
+				:Mangrep 1 foobar
+
+			If man page section number is not provided it will
+			default to 1. So this command:
+				:Mangrep foobar
+
+			is equivalent to this one:
+				:Mangrep 1 foobar
+
+			The section defaults to 1 because searching all
+			sections takes a long time. If you want to force
+			searching all man section, use *:
+				:Mangrep * foobar
+
+			Start a case insensitive search with the '-i' flag:
+				:Mangrep -i 6 foobar
+
+			Regex searches are possible too (the same as
+			with 'grep -E') but remember to quote the search
+			pattern:
+				:Mangrep 6 'foo(bar|baz)'
+
+						*man-:Mangrep-strategy*
+			If you're using neovim, |:Mangrep| command runs
+			asynchronously in the background.
+
+			If you have vim-dispatch plugin installed |:Mangrep|
+			command also runs in the background. Access the
+			results with :Copen command (may be called before
+                        the process is finished).
+
+			With vanilla vim |:Mangrep| will block and make vim
+			unusable until the command is done (and it can take a
+			while). Installing vim-dispatch plugin is recommended,
+			but if that is not possible consider running
+			|:Mangrep| in another vim. That way your working vim instance
+			stays usable.
+
+MAN						*ft-man*
+
+The following mappings are defined when displaying a man page:
+
+						*man-]]*
+]]			Jump to the next section heading.
+
+						*man-[[*
+[[			Jump to the previous section heading.
+
+						*man-CTRL-]* *man-g_CTRL-]*
+						*man-g]* *man-CTRL-W_CTRL-]*
+						*man-CTRL-W_]* *man-CTRL-W_g}*
+						*man-CTRL-W_CTRL-]*
+						*man-CTRL-W_g_CTRL-]*
+						*man-CTRL-W_g]* *man-CTRL-W_}*
+CTRL-]			Jump to man page for a word under cursor (all the
+			mappings behave the same).
+
+						*man-K*
+K			Same as |man-CTRL-]|.
+
+						*man-CTRL-T*
+CTRL-T			Jump back to the previous man page.
+
+MAPS						*man-maps*
+
+No global mappings are defined by default, but you can define the following
+in your |vimrc|:
+
+- open man page for a word under cursor in a horizontal split
+>
+  map <leader>k <Plug>(Man)
+<
+- open man page for a word under cursor in a vertical split
+>
+  map <leader>v <Plug>(Vman)
+<
+
+CONTRIBUTING					*man-contributing* *man-bugs*
+
+Contributing and bug fixes are welcome. If you have an idea for a new feature
+please get in touch by opening an issue so we can discuss it first.
+
+Github repo:
+
+  https://github.com/bruno-/vim-man
+
+List of open issues:
+
+  https://github.com/bruno-/vim-man/issues
+
+CREDITS						*man-credits*
+
+This plugin is an improvement of vim's original man page plugin. These people
+created and maintain (or maintained) the original man.vim plugin:
+
+	* SungHyun Nam
+	* Gautam H. Mudunuri
+	* Johannes Tanzler
+
+LICENSE						*man-license*
+
+Same as Vim itself (see |license|)
+
+ vim:tw=78:ts=8:ft=help:norl:
