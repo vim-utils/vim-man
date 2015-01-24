@@ -1,3 +1,11 @@
+" load guard {{{1
+
+if exists('g:autoloaded_man_grep')
+  finish
+endif
+let g:autoloaded_man_grep = 1
+
+" }}}
 " man#grep#run {{{1
 
 function! man#grep#run(bang, ...)

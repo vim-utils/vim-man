@@ -1,3 +1,11 @@
+" load guard {{{1
+
+if exists('g:autoloaded_man_helpers')
+  finish
+endif
+let g:autoloaded_man_helpers = 1
+
+" }}}
 " man#helpers#section_arg and man#helpers#find_arg {{{1
 
 let s:section_arg = ''

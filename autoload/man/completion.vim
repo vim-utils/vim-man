@@ -1,3 +1,11 @@
+" load guard {{{1
+
+if exists('g:autoloaded_man_completion')
+  finish
+endif
+let g:autoloaded_man_completion = 1
+
+" }}}
 " man#completion#run {{{1
 
 function! man#completion#run(A, L, P)

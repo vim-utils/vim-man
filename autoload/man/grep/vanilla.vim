@@ -1,6 +1,14 @@
 " Stategy for running :Mangrep command in "vanilla" vim. It blocks vim until
 " the command is done.
 "
+" load guard {{{1
+
+if exists('g:autoloaded_man_grep_vanilla')
+  finish
+endif
+let g:autoloaded_man_grep_vanilla = 1
+
+" }}}
 " man#grep#vanilla#run {{{1
 
 function! man#grep#vanilla#run(bang, insensitive, pattern, files)

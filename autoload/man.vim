@@ -1,3 +1,11 @@
+" load guard {{{1
+
+if exists('g:autoloaded_man')
+  finish
+endif
+let g:autoloaded_man = 1
+
+" }}}
 " variable initialization {{{1
 
 let s:man_tag_depth = 0

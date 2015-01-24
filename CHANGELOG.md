@@ -2,6 +2,8 @@
 
 ### master
 
+- add "guards" for the autoload files
+
 ### v0.1.0, Jan 24, 2015
 
 - split the main script into ftplugin, plugin and autoload directories

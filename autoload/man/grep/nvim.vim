@@ -1,5 +1,13 @@
 " strategy to utilize NeoVim's async jobs for :Mangrep command
 "
+" load guard {{{1
+
+if exists('g:autoloaded_man_grep_nvim')
+  finish
+endif
+let g:autoloaded_man_grep_nvim = 1
+
+" }}}
 " neovim current async job state {{{1
 
 " these variables keep the state of neovim's current async job

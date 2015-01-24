@@ -1,3 +1,11 @@
+" load guard {{{1
+
+if exists('g:autoloaded_man_section')
+  finish
+endif
+let g:autoloaded_man_section = 1
+
+" }}}
 " man#section#move {{{1
 
 function! man#section#move(direction, mode, count)

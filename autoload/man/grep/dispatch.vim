@@ -1,5 +1,13 @@
 " strategy to utilize vim-dispatch's plugin async jobs for :Mangrep command
 "
+" load guard {{{1
+
+if exists('g:autoloaded_man_grep_dispatch')
+  finish
+endif
+let g:autoloaded_man_grep_dispatch = 1
+
+" }}}
 " man#grep#dispatch {{{1
 
 function! man#grep#dispatch#run(bang, insensitive, pattern, path_glob)
