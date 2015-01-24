@@ -9,7 +9,7 @@ View man pages in vim. Grep for the man pages.
 - `:Man printf` - open `printf(1)` man page in a split
 - `:Vman 3 putc` - open `putc(3)` man page in a vertical split (read more
   [here](http://unix.stackexchange.com/a/3587/80379) on what the
-  manual page numbers mean - they are really useful)
+  manual page numbers mean, they are really useful)
 - `:Man pri<Tab>` - command completion for man page names
 - `:Man 3 pri<Tab>` - completion "respects" the man page section argument
 - `:Man 6 <Ctrl-D>` - list all man pages from section 6
@@ -64,7 +64,7 @@ accurate, you might experience hiccups when opening those results.
 
 Running `Mangrep`:
 
-- the command runs in the background if you're using neovim
+- the command runs in the background if you use neovim
 - The command runs in the background if you have
   [vim-dispatch](https://github.com/tpope/vim-dispatch) installed. Access the
   results with

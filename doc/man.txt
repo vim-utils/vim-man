@@ -9,7 +9,7 @@ This plugin enables viewing and navigating manual pages in vim.
 
 COMMANDS					*man-commands*
 
-						*man-:Man*
+						*man-:Man_command*
 :Man [args]		Open man page in a horizontal split. The command has
 			support for man page completion.
 			Examples:
@@ -20,16 +20,17 @@ COMMANDS					*man-commands*
 			without arguments to open current file as a man page.
 
 						*man-:Sman*
-:Sman [args]		The same as |:Man|.
+:Sman [args]		The same as |:Man_command|.
 
 						*man-:Vman*
-:Vman [args]		Like |:Man|, but open man page in a vertical split.
+:Vman [args]		Like |:Man_command|, but open man page in a vertical
+			split.
 
 						*man-:Mangrep*
 :Mangrep[!] [args]	Grep the content of manual pages. This feature is
 			still in "beta". Results should be accurate, but you
 			might experience hiccups when opening results from the
-			quickfix list. Also please see |:Mangrep-strategy|.
+			quickfix list. Also please see |:Mangrep_strategy|.
 			Example:
 				:Mangrep 1 foobar
 
@@ -42,7 +43,7 @@ COMMANDS					*man-commands*
 
 			The section defaults to 1 because searching all
 			sections takes a long time. If you want to force
-			searching all man section, use *:
+			searching all man sections, use *:
 				:Mangrep * foobar
 
 			Start a case insensitive search with the '-i' flag:
@@ -53,8 +54,8 @@ COMMANDS					*man-commands*
 			pattern:
 				:Mangrep 6 'foo(bar|baz)'
 
-						*man-:Mangrep-strategy*
-			If you're using neovim, |:Mangrep| command runs
+						*man-:Mangrep_strategy*
+			If you use neovim, |:Mangrep| command runs
 			asynchronously in the background.
 
 			If you have vim-dispatch plugin installed |:Mangrep|
@@ -82,7 +83,6 @@ The following mappings are defined when displaying a man page:
 						*man-CTRL-]* *man-g_CTRL-]*
 						*man-g]* *man-CTRL-W_CTRL-]*
 						*man-CTRL-W_]* *man-CTRL-W_g}*
-						*man-CTRL-W_CTRL-]*
 						*man-CTRL-W_g_CTRL-]*
 						*man-CTRL-W_g]* *man-CTRL-W_}*
 CTRL-]			Jump to man page for a word under cursor (all the
