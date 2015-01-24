@@ -11,7 +11,7 @@ let s:grep_opened_first_result = 0
 " neovim JobActivity autocmd {{{1
 
 if has('nvim')
-  augroup manGrep
+  augroup manGrepNvim
     au!
     au JobActivity mangrep call man#grep#nvim#handle_async_output()
   augroup END

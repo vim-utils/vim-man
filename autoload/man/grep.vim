@@ -93,12 +93,19 @@ function! man#grep#create_empty_buffer(name, section)
     return bufnr(a:name.'('.a:section.')')
   endif
   let buffer_num = bufnr(a:name.'('.a:section.')', 1)
-  " saving manpage name and section as buffer variable, so they're
-  " easy to get later when in the buffer
-  call setbufvar(buffer_num, 'man_name', a:name)
-  call setbufvar(buffer_num, 'man_section', a:section)
-  exec 'au BufEnter <buffer='.buffer_num.'> call man#grep#quickfix_get_page()'
+  call man#grep#setup_manpage_buffer(buffer_num, a:name, a:section)
   return buffer_num
+endfunction
+
+" }}}
+" man#grep#setup_manpage_buffer {{{1
+
+" saving manpage name and section as buffer variable, so they're
+" easy to get later when in the buffer
+function! man#grep#setup_manpage_buffer(buffer_num, name, section)
+  call setbufvar(a:buffer_num, 'man_name', a:name)
+  call setbufvar(a:buffer_num, 'man_section', a:section)
+  exec 'au BufEnter <buffer='.a:buffer_num.'> call man#grep#quickfix_get_page()'
 endfunction
 
 " }}}
