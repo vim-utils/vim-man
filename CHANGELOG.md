@@ -2,6 +2,8 @@
 
 ### master
 
+### v0.1.0, Jan 24, 2015
+
 - split the main script into ftplugin, plugin and autoload directories
 - remove tab characters from the source and whitespace cleanup
 - remove script headers, give credits to the authors in the README
