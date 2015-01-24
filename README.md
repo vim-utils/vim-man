@@ -4,7 +4,7 @@ View man pages in vim.
 
 ### Features and Usage
 
-Viewing manpages:
+##### Viewing manpages
 
 - `:Man printf` - open `printf(1)` manpage in a split
 - `:Vman 3 putc` - open `putc(3)` manpage in a vertical split (read more
@@ -14,11 +14,11 @@ Viewing manpages:
 - `:Man 3 pri<Tab>` - completion "respects" the manpage section argument
 - `:Man 6 <Ctrl-D>` - list all manpages from section 6
 
-When editing `nroff` files:
+##### When editing `nroff` files
 
 - `:Man` - (without arguments) open a current `nroff` file as a manpage
 
-When inside a manpage buffer:
+##### When inside a manpage buffer
 
 - `[[` and `]]` - jump to prev/next section heading
 - `Ctrl-]` - jump to manpage for a word under cursor (works nicely with
@@ -33,7 +33,9 @@ When inside a manpage buffer:
   works nicely with C header files often found in section 2 and 3 manpages i.e.
   `<sys/socket.h>`)
 
-Searching/grepping manpages (also see [About Mangrep](#about-mangrep)):
+##### Searching/grepping manpages
+
+Also see [About Mangrep](#about-mangrep)
 
 - `:Mangrep 1 foobar` - search for "foobar" in all section 1 manpages
 - `:Mangrep foobar` - same as `:Mangrep 1 foobar` (grepping all man sections
@@ -42,11 +44,13 @@ Searching/grepping manpages (also see [About Mangrep](#about-mangrep)):
 - `:Mangrep -i 6 foobar` - case insensitive search
 - `:Mangrep 6 (foo|bar|baz)` - regex search (`Mangrep` uses `grep -E`)
 
-Defining these mappings is possible in `.vimrc` (none are defined by default):
+##### Defining mappings in `.vimrc`
+
+No mappings are defined by default.
 
 - `map <leader>k <Plug>(Man)` - open manpage for word under cursor in a horizontal
   split
-- `map <leader>v <Plug>(Vman)` - open manpage for word under cursor in a vertial
+- `map <leader>v <Plug>(Vman)` - open manpage for word under cursor in a vertical
   split
 
 ### About Mangrep
