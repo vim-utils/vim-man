@@ -42,8 +42,10 @@ nnoremap <silent> <buffer> <C-W>g<C-]> :call man#get_page_from_cword('horizontal
 nnoremap <silent> <buffer> <C-W>g]     :call man#get_page_from_cword('horizontal', v:count)<CR>
 nnoremap <silent> <buffer> <C-W>}      :call man#get_page_from_cword('horizontal', v:count)<CR>
 nnoremap <silent> <buffer> <C-W>g}     :call man#get_page_from_cword('horizontal', v:count)<CR>
+nnoremap <silent> <buffer> ]t          :call man#get_page_from_cword('horizontal', v:count)<CR>
 
 nnoremap <silent> <buffer> <C-T> :call man#pop_page()<CR>
+nnoremap <silent> <buffer> [t    :call man#pop_page()<CR>
 
 nnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'n', v:count1)<CR>
 nnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'n', v:count1)<CR>
