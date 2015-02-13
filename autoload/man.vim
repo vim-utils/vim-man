@@ -37,6 +37,7 @@ function! man#get_page(split_type, ...)
   call s:get_new_or_existing_man_window(a:split_type)
   call man#helpers#set_manpage_buffer_name(page, sect)
   call man#helpers#load_manpage_text(page, sect)
+  execute "nnoremap <buffer><silent> R :call man#helpers#load_manpage_text('".page."','".sect."')<CR>"
 endfunction
 
 function! s:manpage_exists(sect, page)

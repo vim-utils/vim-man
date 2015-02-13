@@ -25,6 +25,7 @@ View man pages in vim. Grep for the man pages.
   specially highlighted references to other man pages i.e. `printf(3)`), also
   defined for other tag mappings like `g_Ctrl-]`, `Ctrl-W_Ctrl-]` etc.
 - `K` - same as `Ctrl-]`
+- `R` - redraw manpage text, useful after a vertical resize
 - `Ctrl-T` - jump \*back* to the previous man page
 - `gx` - open a link under cursor in a browser
   ([vim feature](http://vimdoc.sourceforge.net/htmldoc/pi_netrw.html#netrw-gx))

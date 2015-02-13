@@ -91,6 +91,9 @@ CTRL-]			Jump to man page for a word under cursor (all the
 						*man-K*
 K			Same as |man-CTRL-]|.
 
+						*man-R*
+R			Redraw the man page, useful after vertical resize.
+
 						*man-CTRL-T*
 CTRL-T			Jump back to the previous man page.
 
