@@ -18,6 +18,8 @@ setlocal nonumber
 setlocal norelativenumber
 setlocal foldcolumn=0
 setlocal nofoldenable
+setlocal nolist
+setlocal colorcolumn=
 
 " tabs in man pages are 8 spaces
 setlocal tabstop=8
