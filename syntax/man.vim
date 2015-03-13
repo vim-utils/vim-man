@@ -24,9 +24,12 @@ if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
   syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
 endif
 
-syntax match manFile       display '\s\zs\~\?\/[0-9A-Za-z_*/$.{}-]*' contained
-syntax match manEnvVarFile display '\s\zs\$[0-9A-Za-z_{}]\+\/[0-9A-Za-z_*/$.{}-]*' contained
+syntax match manFile       display '\s\zs\~\?\/[0-9A-Za-z_*/$.{}<>-]*' contained
+syntax match manEnvVarFile display '\s\zs\$[0-9A-Za-z_{}]\+\/[0-9A-Za-z_*/$.{}<>-]*' contained
 syntax region manFiles     start='^FILES'hs=s+5 end='^\u[A-Z ]*$'me=e-30 keepend contains=manReference,manSectionHeading,manHeaderFile,manURL,manEmail,manFile,manEnvVarFile
+
+syntax match manEnvVar     display '\s\zs\(\u\|_\)\{3,}' contained
+syntax region manFiles     start='^ENVIRONMENT'hs=s+11 end='^\u[A-Z ]*$'me=e-30 keepend contains=manReference,manSectionHeading,manHeaderFile,manURL,manEmail,manEnvVar
 
 hi def link manTitle           Title
 hi def link manSectionHeading  Statement
@@ -41,6 +44,7 @@ hi def link manCError          Identifier
 hi def link manSignal          Identifier
 hi def link manFile            Identifier
 hi def link manEnvVarFile      Identifier
+hi def link manEnvVar          Identifier
 hi def link manHighlight       Statement
 
 let b:current_syntax = 'man'
