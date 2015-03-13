@@ -21,7 +21,7 @@ if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
   syntax match manCError           display '^\s\+\[E\(\u\|\d\)\+\]' contained
   syntax match manSignal           display '\C\<\zs\(SIG\|SIG_\|SA_\)\(\d\|\u\)\+\ze\(\W\|$\)'
   syntax region manSynopsis start='^\(LEGACY \)\?SYNOPSIS'hs=s+8 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSectionHeading,@cCode,manCFuncDefinition,manHeaderFile
-  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manSubHeading,manHeaderFile,manCError
+  syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manHeaderFile,manCError
 endif
 
 syntax match manFile       display '\s\zs\~\?\/[0-9A-Za-z_*/$.{}-]*' contained
@@ -33,7 +33,6 @@ hi def link manSectionHeading  Statement
 hi def link manOptionDesc      Constant
 hi def link manLongOptionDesc  Constant
 hi def link manReference       PreProc
-hi def link manSubHeading      Function
 hi def link manCFuncDefinition Function
 hi def link manHeaderFile      String
 hi def link manURL             Underlined
