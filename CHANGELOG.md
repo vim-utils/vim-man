@@ -3,6 +3,7 @@
 ### master
 
 - add "guards" for the autoload files
+- add syntax highlighting for files in FILES manpage section
 
 ### v0.1.0, Jan 24, 2015
 

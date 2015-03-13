@@ -24,6 +24,10 @@ if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
   syntax region manErrors   start='^ERRORS'hs=s+6 end='^\u[A-Z ]*$'me=e-30 keepend contains=manSignal,manReference,manSectionHeading,manSubHeading,manHeaderFile,manCError
 endif
 
+syntax match manFile       display '\s\zs\~\?\/[0-9A-Za-z_*/$.{}-]*' contained
+syntax match manEnvVarFile display '\s\zs\$[0-9A-Za-z_{}]\+\/[0-9A-Za-z_*/$.{}-]*' contained
+syntax region manFiles     start='^FILES'hs=s+5 end='^\u[A-Z ]*$'me=e-30 keepend contains=manReference,manSectionHeading,manHeaderFile,manURL,manEmail,manFile,manEnvVarFile
+
 hi def link manTitle           Title
 hi def link manSectionHeading  Statement
 hi def link manOptionDesc      Constant
@@ -36,6 +40,8 @@ hi def link manURL             Underlined
 hi def link manEmail           Underlined
 hi def link manCError          Identifier
 hi def link manSignal          Identifier
+hi def link manFile            Identifier
+hi def link manEnvVarFile      Identifier
 hi def link manHighlight       Statement
 
 let b:current_syntax = 'man'
