@@ -10,7 +10,7 @@ syntax match manReference       '\<\zs\(\f\|:\)\+(\([nlpo]\|\d[a-z]*\)\?)\ze\(\W
 syntax match manTitle           '^\(\f\|:\)\+([0-9nlpo][a-z]*).*'
 syntax match manSectionHeading  '^[a-z][a-z0-9& ,.-]*[a-z]$'
 syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
-syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^'  <>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^'  <>"]+)[a-zA-Z0-9/]`
+syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^' 	<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^' 	<>"]+)[a-zA-Z0-9/]`
 syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
 syntax match manHighlight       +`.\{-}''\?+
 
