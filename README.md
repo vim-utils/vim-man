@@ -33,6 +33,27 @@ View man pages in vim. Grep for the man pages.
   works nicely with C header files often found in section 2 and 3 man pages i.e.
   `<sys/socket.h>`)
 
+##### Using from the shell
+
+You can use vim-man from the shell (instead of standard `man` program) using
+the following script:
+
+        #! /bin/sh
+        vim -c "Man $1 $2" -c 'silent only'
+
+Save it in `/usr/bin/` as a file named `viman`, give it execution
+permission with:
+
+    $ chmod +x /usr/bin/viman
+
+Then from your shell you can read a DOC with:
+
+    $ viman doc
+
+Or you can use the alias `alias man=viman` so you can do (as usual):
+
+    $ man doc
+
 ##### Searching/grepping man pages
 
 Also see [About Mangrep](#about-mangrep)
