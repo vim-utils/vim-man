@@ -38,8 +38,8 @@ View man pages in vim. Grep for the man pages.
 You can use vim-man from the shell (instead of standard `man` program) using
 the following script:
 
-        #! /bin/sh
-        vim -c "Man $1 $2" -c 'silent only'
+    #! /bin/sh
+    vim -c "Man $1 $2" -c 'silent only'
 
 Save it in `/usr/bin/` as a file named `viman`, give it execution
 permission with:
