@@ -34,6 +34,9 @@ syntax region manFiles     start='^ENVIRONMENT'hs=s+11 end='^\u[A-Z ]*$'me=e-30 
 " Options
 syntax match manOptions  '\v[^a-z0-9]\zs-{1,2}[[:alnum:]\-\_]+\ze'
 
+" SYNOPSIS Section
+syntax match manSynOptions  '\v\[\U*\zs[A-Z]{4,}\ze.*\]'
+
 hi def link manTitle           Title
 hi def link manSectionHeading  Statement
 hi def link manOptionDesc      Constant
@@ -50,6 +53,7 @@ hi def link manEnvVarFile      Identifier
 hi def link manEnvVar          Identifier
 hi def link manHighlight       Statement
 hi def link manOptions         Identifier
+hi def link manSynOptions      Underlined
 
 let b:current_syntax = 'man'
 
