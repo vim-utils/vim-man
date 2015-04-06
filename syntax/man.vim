@@ -31,6 +31,9 @@ syntax region manFiles     start='^FILES'hs=s+5 end='^\u[A-Z ]*$'me=e-30 keepend
 syntax match manEnvVar     display '\s\zs\(\u\|_\)\{3,}' contained
 syntax region manFiles     start='^ENVIRONMENT'hs=s+11 end='^\u[A-Z ]*$'me=e-30 keepend contains=manReference,manSectionHeading,manHeaderFile,manURL,manEmail,manEnvVar
 
+" Options
+syntax match manOptions  '\v[^a-z0-9]\zs-{1,2}[[:alnum:]\-\_]+\ze'
+
 hi def link manTitle           Title
 hi def link manSectionHeading  Statement
 hi def link manOptionDesc      Constant
@@ -46,6 +49,7 @@ hi def link manFile            Identifier
 hi def link manEnvVarFile      Identifier
 hi def link manEnvVar          Identifier
 hi def link manHighlight       Statement
+hi def link manOptions         Identifier
 
 let b:current_syntax = 'man'
 
