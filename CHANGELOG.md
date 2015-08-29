@@ -7,6 +7,7 @@
 - syntax highlighting for environment variables in ENVIRONMENT manpage section
 - syntax bugfix: url's can't contain tab characters
 - add instructions for creating `viman` command line script (@alx741)
+- `q` mapping quits `vim-man` buffer
 
 ### v0.1.0, Jan 24, 2015
 

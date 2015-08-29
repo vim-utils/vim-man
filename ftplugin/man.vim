@@ -50,6 +50,8 @@ nnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'n', v:count1)<CR
 xnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'v', v:count1)<CR>
 xnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'v', v:count1)<CR>
 
+nnoremap <silent> <buffer> q :q<CR>
+
 " }}}
 
 let b:undo_ftplugin = 'setlocal iskeyword<'

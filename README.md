@@ -32,6 +32,7 @@ View man pages in vim. Grep for the man pages.
   ([vim feature](http://vimdoc.sourceforge.net/htmldoc/editing.html#gf),
   works nicely with C header files often found in section 2 and 3 man pages i.e.
   `<sys/socket.h>`)
+- `q` - quit `vim-man` buffer
 
 ##### Using from the shell
 
