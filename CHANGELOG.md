@@ -8,6 +8,7 @@
 - syntax bugfix: url's can't contain tab characters
 - add instructions for creating `viman` command line script (@alx741)
 - `q` mapping quits `vim-man` buffer
+- `g/` mapping for easier option search
 
 ### v0.1.0, Jan 24, 2015
 

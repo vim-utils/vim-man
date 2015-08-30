@@ -161,4 +161,11 @@ function! s:get_new_or_existing_man_window(split_type)
 endfunction
 
 " }}}
+" :ManOptionSearch {{{1
+
+function! man#option_search(string)
+  call search('^\s*'.a:string)
+endfunction
+
+" }}}
 " vim:set ft=vim et sw=2:

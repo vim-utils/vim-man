@@ -26,6 +26,7 @@ View man pages in vim. Grep for the man pages.
   defined for other tag mappings like `g_Ctrl-]`, `Ctrl-W_Ctrl-]` etc.
 - `K` - same as `Ctrl-]`
 - `Ctrl-T` - jump \*back* to the previous man page
+- `g/` - start option search
 - `gx` - open a link under cursor in a browser
   ([vim feature](http://vimdoc.sourceforge.net/htmldoc/pi_netrw.html#netrw-gx))
 - `gf` - jump to a file under cursor

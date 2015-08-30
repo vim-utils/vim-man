@@ -94,6 +94,9 @@ K			Same as |man-CTRL-]|.
 						*man-CTRL-T*
 CTRL-T			Jump back to the previous man page.
 
+						*man-g/* *g/*
+g/			Start option search.
+
 MAPS						*man-maps*
 
 No global mappings are defined by default, but you can define the following
