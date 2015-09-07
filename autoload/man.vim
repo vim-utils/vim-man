@@ -164,7 +164,7 @@ endfunction
 " :ManOptionSearch {{{1
 
 function! man#option_search(string)
-  call search('^\s*'.a:string)
+  call search('^\s*\zs'.a:string)
 endfunction
 
 " }}}
