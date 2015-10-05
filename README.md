@@ -102,14 +102,7 @@ Running `Mangrep`:
 
 ### Installation
 
-* vim-plug<br/>
-`Plug 'bruno-/vim-man'`
-
-* Vundle<br/>
-`Plugin 'bruno-/vim-man'`
-
-* Pathogen<br/>
-`git clone git://github.com/bruno-/vim-man.git ~/.vim/bundle/vim-man`
+Just use your favorite plugin manager.
 
 ### Contributing
 
