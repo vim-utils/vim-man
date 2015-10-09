@@ -40,6 +40,9 @@ function! man#get_page(split_type, ...)
 endfunction
 
 function! s:manpage_exists(sect, page)
+  if a:page ==# ''
+    return 0
+  endif
   let find_arg = man#helpers#find_arg()
   let where = system('/usr/bin/man '.find_arg.' '.man#helpers#get_cmd_arg(a:sect, a:page))
   if where !~# '^\s*/'

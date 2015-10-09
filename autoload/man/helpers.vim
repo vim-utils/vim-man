@@ -76,10 +76,10 @@ function! man#helpers#load_manpage_text(page, section)
 endfunction
 
 function! s:remove_blank_lines_from_top_and_bottom()
-  while getline(1) =~ '^\s*$'
+  while line('$') > 1 && getline(1) =~ '^\s*$'
     silent keepj norm! ggdd
   endwhile
-  while getline('$') =~ '^\s*$'
+  while line('$') > 1 && getline('$') =~ '^\s*$'
     silent keepj norm! Gdd
   endwhile
   silent keepj norm! gg
