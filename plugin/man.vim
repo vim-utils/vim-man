@@ -9,6 +9,7 @@ set cpo&vim
 command! -nargs=* -bar -complete=customlist,man#completion#run Man  call man#get_page('horizontal', <f-args>)
 command! -nargs=* -bar -complete=customlist,man#completion#run Sman call man#get_page('horizontal', <f-args>)
 command! -nargs=* -bar -complete=customlist,man#completion#run Vman call man#get_page('vertical',   <f-args>)
+command! -nargs=* -bar -complete=customlist,man#completion#run Tman call man#get_page('tab',        <f-args>)
 
 command! -nargs=+ -bang Mangrep call man#grep#run(<bang>0, <f-args>)
 
