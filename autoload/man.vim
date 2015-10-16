@@ -153,7 +153,9 @@ function! s:get_new_or_existing_man_window(split_type)
     if &filetype != 'man'
       if a:split_type == 'vertical'
         vnew
-      else
+      elseif a:split_type == 'tab'
+        tabnew
+      elseif a:split_type != 'only' || &modified
         new
       endif
     endif
