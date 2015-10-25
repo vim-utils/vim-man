@@ -104,6 +104,11 @@ Running `Mangrep`:
 
 Just use your favorite plugin manager.
 
+If you were previously using `man.vim` that comes with vim by default, please
+remove this line `runtime! ftplugin/man.vim` from your `.vimrc`. It's known to
+be causing [issues](https://github.com/vim-utils/vim-man/issues/23) with this
+plugin.
+
 ### Contributing
 
 Contributing and bug fixes are welcome. If you have an idea for a new feature
