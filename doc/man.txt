@@ -116,6 +116,16 @@ Default man command is '/usr/bin/man', but it can be changed:
 >
   let g:vim_man_cmd = 'LANG=ja_JP.UTF-8 /usr/bin/man'
 <
+
+
+man_split_type                          *g:man_split_type*
+Change the default split type when using |:Man|. Valid values are
+'horizontal', 'vertical', or 'tab'
+
+>
+  let g:man_split_type = 'horizontal'
+<
+
 CONTRIBUTING					*man-contributing* *man-bugs*
 
 Contributing and bug fixes are welcome. If you have an idea for a new feature
