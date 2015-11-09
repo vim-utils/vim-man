@@ -44,7 +44,7 @@ function! s:manpage_exists(sect, page)
     return 0
   endif
   let find_arg = man#helpers#find_arg()
-  let where = system('/usr/bin/man '.find_arg.' '.man#helpers#get_cmd_arg(a:sect, a:page))
+  let where = system(g:vim_man_man_cmd.' '.find_arg.' '.man#helpers#get_cmd_arg(a:sect, a:page))
   if where !~# '^\s*/'
     " result does not look like a file path
     return 0
