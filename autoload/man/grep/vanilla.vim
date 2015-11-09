@@ -15,7 +15,7 @@ function! man#grep#vanilla#run(bang, insensitive, pattern, files)
   let $MANWIDTH = man#helpers#manwidth()
   let insensitive_flag = a:insensitive ? '-i' : ''
   for file in a:files
-    let output_manfile  = '/usr/bin/man '.file.' | col -b |'
+    let output_manfile  = g:vim_man_cmd.' '.file.' | col -b |'
     let trim_whitespace = "sed '1 {; /^\s*$/d; }' |"
     let grep = 'grep '.insensitive_flag.' -n -E '.a:pattern
     let matches = systemlist(output_manfile . trim_whitespace . grep)

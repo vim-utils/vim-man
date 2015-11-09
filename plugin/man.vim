@@ -6,6 +6,10 @@ let g:loaded_man = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+if !exists('g:vim_man_cmd')
+  let g:vim_man_cmd='/usr/bin/man'
+endif
+
 command! -nargs=* -bar -complete=customlist,man#completion#run Man  call man#get_page('horizontal', <f-args>)
 command! -nargs=* -bar -complete=customlist,man#completion#run Sman call man#get_page('horizontal', <f-args>)
 command! -nargs=* -bar -complete=customlist,man#completion#run Vman call man#get_page('vertical',   <f-args>)
