@@ -126,7 +126,7 @@ function! man#grep#command(path_glob, insensitive_flag, pattern)
   " xargs is used to feed manpages one-by-one
   let command .= 'xargs -I{} -n1 sh -c "manpage={};'
   " inner variables execute within a shell started by xargs
-  let command .= '/usr/bin/man \$manpage 2>/dev/null|col -b|'
+  let command .= g:vim_man_man_cmd.' \$manpage 2>/dev/null|col -b|'
   " if the first manpage line is blank, remove it (stupid semicolons are required)
   let command .= "sed '1 {;/^\s*$/d;}'|"
   let command .= 'grep '.a:insensitive_flag.' -nE '.a:pattern.'|'
