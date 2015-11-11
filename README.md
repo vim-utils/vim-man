@@ -81,7 +81,7 @@ No mappings are defined by default.
 ### About Mangrep
 
 This feature is still in beta.
-Please help fix the [issues](https://github.com/bruno-/vim-man/issues/).
+Please help fix the [issues](https://github.com/vim-utils/vim-man/issues/).
 
 `Mangrep` populates quickfix list with the results. While they should be
 accurate, you might experience hiccups when opening those results.

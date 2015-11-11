@@ -123,11 +123,11 @@ please get in touch by opening an issue so we can discuss it first.
 
 Github repo:
 
-  https://github.com/bruno-/vim-man
+  https://github.com/vim-utils/vim-man
 
 List of open issues:
 
-  https://github.com/bruno-/vim-man/issues
+  https://github.com/vim-utils/vim-man/issues
 
 CREDITS						*man-credits*
 
