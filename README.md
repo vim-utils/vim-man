@@ -78,6 +78,10 @@ No mappings are defined by default.
 - `map <leader>v <Plug>(Vman)` - open man page for word under cursor in a vertical
   split
 
+If you want to overwrite the default manpage view of vim using the capital 'K' letter, use the following:
+
+- `nmap <unique> K <Plug>(Man)` - open man page for word under cursor in a horizontal split
+
 ### About Mangrep
 
 This feature is still in beta.
