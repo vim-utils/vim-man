@@ -13,6 +13,7 @@ syntax match manHeaderFile      '\s\zs<\f\+\.h>\ze\(\W\|$\)'
 syntax match manURL             `\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^' 	<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^' 	<>"]+)[a-zA-Z0-9/]`
 syntax match manEmail           '<\?[a-zA-Z0-9_.+-]\+@[a-zA-Z0-9-]\+\.[a-zA-Z0-9-.]\+>\?'
 syntax match manHighlight       +`.\{-}''\?+
+syntax match manOptions         '\v[^a-z0-9]\zs-{1,2}[[:alnum:]-_?]+\ze'
 
 " below syntax elements valid for manpages 2 & 3 only
 if getline(1) =~ '^\(\f\|:\)\+([23][px]\?)'
@@ -46,6 +47,7 @@ hi def link manFile            Identifier
 hi def link manEnvVarFile      Identifier
 hi def link manEnvVar          Identifier
 hi def link manHighlight       Statement
+hi def link manOptions         Constant
 
 let b:current_syntax = 'man'
 
