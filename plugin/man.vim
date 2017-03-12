@@ -2,6 +2,7 @@ if exists('g:loaded_vim_utils_man') && g:loaded_vim_utils_man
   finish
 endif
 let g:loaded_vim_utils_man = 1
+let g:loaded_man = 1 " stop the buildin man plugin from loading
 
 let s:save_cpo = &cpo
 set cpo&vim
