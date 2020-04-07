@@ -32,27 +32,29 @@ setlocal noswapfile
 " }}}
 " mappings {{{1
 
-nnoremap <silent> <buffer> K           :call man#get_page_from_cword('horizontal', v:count)<CR>
-" all tag mappings are defined for completeness and they all perform the same action
-nnoremap <silent> <buffer> <C-]>       :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> g<C-]>      :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> g]          :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W>]      :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W><C-]>  :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W>g<C-]> :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W>g]     :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W>}      :call man#get_page_from_cword('horizontal', v:count)<CR>
-nnoremap <silent> <buffer> <C-W>g}     :call man#get_page_from_cword('horizontal', v:count)<CR>
+if !exists('g:no_plugin_maps') && !exists('g:no_man_maps')
+  nnoremap <silent> <buffer> K           :call man#get_page_from_cword('horizontal', v:count)<CR>
+  " all tag mappings are defined for completeness and they all perform the same action
+  nnoremap <silent> <buffer> <C-]>       :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> g<C-]>      :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> g]          :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W>]      :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W><C-]>  :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W>g<C-]> :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W>g]     :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W>}      :call man#get_page_from_cword('horizontal', v:count)<CR>
+  nnoremap <silent> <buffer> <C-W>g}     :call man#get_page_from_cword('horizontal', v:count)<CR>
 
-nnoremap <silent> <buffer> <C-T> :call man#pop_page()<CR>
+  nnoremap <silent> <buffer> <C-T> :call man#pop_page()<CR>
 
-nnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'n', v:count1)<CR>
-nnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'n', v:count1)<CR>
-xnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'v', v:count1)<CR>
-xnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'v', v:count1)<CR>
+  nnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'n', v:count1)<CR>
+  nnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'n', v:count1)<CR>
+  xnoremap <silent> <buffer> [[ :<C-U>call man#section#move('b', 'v', v:count1)<CR>
+  xnoremap <silent> <buffer> ]] :<C-U>call man#section#move('' , 'v', v:count1)<CR>
 
-nnoremap <silent> <buffer> q :q<CR>
-nnoremap <buffer> g/ /^\s*\zs
+  nnoremap <silent> <buffer> q :q<CR>
+  nnoremap <buffer> g/ /^\s*\zs
+endif
 
 " }}}
 
